@@ -39,7 +39,7 @@ typedef struct {
     char numLecteur[6];
     char nom[30];
     char prenom[30];
-    Adresse *adresse;
+    Adresse adresse;
     Emprunt *TabEmprunt[4]; //tableau qui liste les emprunts
 } Lecteur;
 
@@ -65,10 +65,10 @@ typedef struct maillonLecteur {
 
 // liste fonctions
 
-ListeLecteur listeVide (void);
+ListeLecteur listeVide(void);
 ListeLecteur insererEnTeteLec(ListeLecteur listeL, Lecteur lec, MaillonLecteur *m);
 ListeLecteur insererLecNum(ListeLecteur listeL, Lecteur lec, int *trouve, MaillonLecteur *m);
 ListeLecteur insererLecNom(ListeLecteur listeL, Lecteur lec, MaillonLecteur *m);
 ListeLecteur insererLec(ListeLecteur listeL, Lecteur lec);
-
+void afficherLec(ListeLecteur listeL);
 

@@ -3,14 +3,27 @@
 void test (void)
 {
     ListeLecteur listeL;
-    Lecteur l;
+    Lecteur l1, l2;
 
-    strcpy(l.numLecteur,"0001");
-    strcpy(l.nom, "Bon");
-    strcpy(l.prenom, "Jean");
+    strcpy(l1.numLecteur,"0001");
+    strcpy(l1.nom, "Bon");
+    strcpy(l1.prenom, "Jean");
+
+    strcpy(l2.numLecteur,"0010");
+    strcpy(l2.nom, "Trescartes");
+    strcpy(l2.prenom, "Alexis");
 
     listeL = listeVide();
-    listeL = insererLec(listeL, l);
+    listeL = insererLec(listeL, l1);
+    listeL = insererLec(listeL, l2);
+
+    strcpy(l2.numLecteur,"0009");
+    strcpy(l2.nom, "Trescartes");
+    strcpy(l2.prenom, "Alexis");
+
+    listeL = insererLec(listeL, l2);
+
+    afficherLec(listeL);
 }
 
 

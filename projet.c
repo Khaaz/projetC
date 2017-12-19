@@ -34,7 +34,7 @@ ListeLecteur insererLecNum(ListeLecteur listeL, Lecteur lec, int *trouve, Maillo
         return listeL;
     }
 
-    listeL->suivNum = insererLecNum(listeL->suivNum, lec, &trouve, m);
+    listeL->suivNum = insererLecNum(listeL->suivNum, lec, trouve, m);
     *trouve = 0;
     return listeL;
 }

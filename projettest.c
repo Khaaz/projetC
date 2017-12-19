@@ -5,9 +5,9 @@ void test (void)
     ListeLecteur listeL;
     Lecteur l;
 
-    l.numLecteur = "0001";
-    l.nom = "Bon";
-    l.prenom = "Jean";
+    strcpy(l.numLecteur,"0001");
+    strcpy(l.nom, "Bon");
+    strcpy(l.prenom, "Jean");
 
     listeL = listeVide();
     listeL = insererLec(listeL, l);

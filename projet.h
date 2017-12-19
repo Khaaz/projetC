@@ -29,6 +29,13 @@ typedef struct {
 
 // specifique
 typedef struct {
+    char cote[11];
+    char numLecteur[6];
+    Date dateEmprunt;
+    Date *dateRetour;
+} Emprunt;
+
+typedef struct {
     char numLecteur[6];
     char nom[30];
     char prenom[30];
@@ -40,16 +47,11 @@ typedef struct {
     char cote[11];
     char titre[30];
     char categorie[30];
-    Boolen dispo; // Ouvrage dispo ou pas
+    Booleen dispo; // Ouvrage dispo ou pas
     Emprunt *e; // si ouvrage non dispo ==> donnée de l'emprunt
 } Ouvrage;
 
-typedef struct {
-    char cote[11];
-    Lecteur l;
-    Date dateEmprunt;
-    Date *dateRetour;
-} Emprunt;
+
 
 //listes
 

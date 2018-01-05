@@ -37,7 +37,7 @@ typedef struct {
     char nom[30];
     char prenom[30];
     Adresse adresse;
-    Emprunt *TabEmprunt[4]; //tableau qui liste les emprunts
+    Emprunt *TabEmprunt[4]; //tableau qui liste les emprunts en cours
 } Lecteur;
 
 typedef struct {
@@ -45,7 +45,7 @@ typedef struct {
     char titre[30];
     char categorie[30];
     Booleen dispo; // Ouvrage dispo ou pas
-    Emprunt *e; // si ouvrage non dispo ==> donnée de l'emprunt
+    Emprunt *e; // si ouvrage non dispo ==> donnée de l'emprunt en cours
 } Ouvrage;
 
 
@@ -60,17 +60,21 @@ typedef struct maillonLecteur {
 
 
 
-// liste fonctions
+// LISTE FONCTIONS
 
+//FONCTIONS LECTEUR(+MENUS)
 ListeLecteur listeVide(void);
 ListeLecteur ChargementLecteur(ListeLecteur listeLNum,ListeLecteur *listeLNom);
 Lecteur lireLecteur(FILE *flot);
-int Menu(void);
+int MenuPRINCIPAL(void);
+int MenuLecteur(void);
+int MenuOuvrage(void);
+int MenuEmprunt(void);
 int ExisteNumLec(ListeLecteur listeLNum,char NumLecteur[]);
 ListeLecteur insererLecNum(ListeLecteur listeL, MaillonLecteur *m, int *trouve);
 ListeLecteur insererLecNom(ListeLecteur listeL , MaillonLecteur *m );
 ListeLecteur insererLec(ListeLecteur listeLNum , ListeLecteur *listeLNom, Lecteur lec);
-ListeLecteur ajouterLecteurAuClavier (Lecteur Lec,ListeLecteur listeLNum,ListeLecteur *listeLNom);
+ListeLecteur ajouterLecteurAuClavier (ListeLecteur listeLNum,ListeLecteur *listeLNom);
 void afficherLec(ListeLecteur listeL , int menu );
 void AffichInfosLec(ListeLecteur listeLNum);
 ListeLecteur rechercheNum(char numLecteur[] , int *trouve , ListeLecteur listeLNum,char c);
@@ -84,4 +88,15 @@ void printLecteur(ListeLecteur listeLNum,FILE *flot);
 ListeLecteur menuModifAdresse(ListeLecteur listeLNum);
 ListeLecteur modifAdresse(ListeLecteur listeLNum,ListeLecteur listeApresRech);
 Adresse rentrerAdresse(ListeLecteur listeLNum);
+//FONCTIONS OUVRAGE
+Ouvrage **ChargementOuvrage(int *tmax,int *nb);
+Ouvrage lireOuvrage(FILE *flot);
+void afficherOuvrage(Ouvrage **Touv,int nb);
+int rechercheDichotomie(Ouvrage **tab,int nb,char coteRech[]);
+Ouvrage **insererOuvrage(Ouvrage **Touv,int *nb,int *tmax);
+Ouvrage **decalerAdroite(Ouvrage **Touv,int pos,int nb);
+Ouvrage ajouterOuvrageAuClavier(void);
+void sauvegardeOuvrage(Ouvrage **Touv,int nb);
+void printOuvrage(Ouvrage **Touv,FILE *flot,int i);
+//FONCTIONS EMPRUNT
 

@@ -2,33 +2,82 @@
 
 void test (void)
 {
-    ListeLecteur listeLNom , listeLNum , aux1 ,aux2 ;
-    Lecteur Lec;
+    ListeLecteur listeLNom , listeLNum;
+    Ouvrage **Touv;
 	listeLNom = listeVide();
 	listeLNum = listeVide();
-	int menu , auxLNom , trouve;
-	char c , NumLecRech[6] ;
+	int menu , choixM , tmaxOuvrage, nbOuvrage;
+	char c;
+	system("clear");
 	listeLNum=ChargementLecteur(listeLNum,&listeLNom);
-	printf("\nFichier lecteur chargé\n");
-	menu=Menu();
-	while(menu!=0)
+	printf("Fichier lecteur chargé\n");
+	Touv=ChargementOuvrage(&tmaxOuvrage,&nbOuvrage);
+	printf("Fichier ouvrage chargé\n");
+	choixM=MenuPRINCIPAL();
+	while(choixM!=0)
+	{
+		if (choixM==1)
 		{
-		switch(menu)
+			system("clear");
+			menu=MenuLecteur();
+			while (menu!=0)
 			{
-			case 1 : system("clear");listeLNum=ajouterLecteurAuClavier(Lec,listeLNum,&listeLNom);break;
-			case 2 : system("clear");system("clear");listeLNum=SupprimerGENERAL(listeLNum,&listeLNom);break;
-			case 3 : system("clear");system("clear");AffichInfosLec(listeLNum);break;
-			case 4 : system("clear");afficherLec(listeLNom,menu) ;break;
-			case 5 : system("clear");afficherLec(listeLNum,menu) ;break;
-			case 6 : system("clear");sauvegardeLecteur(listeLNum);break;
-			case 7 : system("clear");listeLNum=menuModifAdresse(listeLNum);break;
+				switch(menu)
+				{
+					case 1 : system("clear");listeLNum=ajouterLecteurAuClavier(listeLNum,&listeLNom);break;
+					case 2 : system("clear");system("clear");listeLNum=SupprimerGENERAL(listeLNum,&listeLNom);break;
+					case 3 : system("clear");system("clear");AffichInfosLec(listeLNum);break;
+					case 4 : system("clear");afficherLec(listeLNom,menu) ;break;
+					case 5 : system("clear");afficherLec(listeLNum,menu) ;break;
+					case 6 : system("clear");sauvegardeLecteur(listeLNum);break;
+					case 7 : system("clear");listeLNum=menuModifAdresse(listeLNum);break;
+				}
+				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU LECTEUR ---");
+				c=getchar();
+				system("clear");
+				menu=MenuLecteur();
 			}
-		printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU ---");
-		c=getchar();
-		system("clear");
-		menu=Menu();
-
 		}
+		if (choixM==2)
+		{
+			system("clear");
+			menu=MenuOuvrage();
+			while (menu!=0)
+			{
+				switch(menu)
+				{
+					case 1 : system("clear");Touv=insererOuvrage(Touv,&nbOuvrage,&tmaxOuvrage);break;
+					case 2 : system("clear");afficherOuvrage(Touv,nbOuvrage);break;
+					case 3 : system("clear");sauvegardeOuvrage(Touv,nbOuvrage);break;
+				}
+				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU OUVRAGE ---");
+				c=getchar();
+				system("clear");
+				menu=MenuOuvrage();
+			}
+		}
+		if (choixM==3)
+		{
+			system("clear");
+			menu=MenuEmprunt();
+			while (menu!=0)
+			{
+				switch(menu)
+				{
+					case 1 : system("clear");break;
+					case 2 : system("clear");break;
+					case 3 : system("clear");break;
+				}
+				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");
+				c=getchar();
+				system("clear");
+				menu=MenuEmprunt();
+			}
+		}
+		system("clear");
+		choixM=MenuPRINCIPAL();
+
+	}
 
 }
 

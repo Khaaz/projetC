@@ -1,12 +1,15 @@
 #include "projet.h"
 
+//FONCTIONS POUR LES LECTEURS
 
-// fonction Liste Lecteur
+// fonction d'initialisation de Liste Lecteur
 
 ListeLecteur listeVide (void)
 {
     return NULL;
 }
+
+//fonctions de chargement des lecteurs dans une liste
 
 ListeLecteur ChargementLecteur(ListeLecteur listeLNum,ListeLecteur *listeLNom)
 
@@ -54,16 +57,46 @@ Lecteur lireLecteur(FILE *flot)
 	return Lec;
 }
 
-int Menu(void)
+//fonctions d'affichage des différents menu
+
+int MenuPRINCIPAL(void)
+
+{
+	int choixM,menu;
+	printf("\n1) Menu Lecteur\n2) Menu Ouvrage\n3) Menu Emprunt\n0) QUITTER\n\n--- Que voulez-vous faire ? ---\n");
+	scanf("%d%*c",&choixM);
+	return choixM;
+}
+
+
+int MenuLecteur(void)
 
 {
 	int menu;
-	printf("\n1) Insérer un nouveau lecteur\n2) Supprimer lecteur\n3) Afficher les informations d'un lecteur \n4) Affichage des lecteurs par ordre alphabétique\n5) Affichage des lecteurs selon leur identifiant de lecteur\n6) Sauvegarder le fichier des lecteurs\n7) Modifier une adresse\n0) QUITTER\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Insérer un nouveau lecteur\n2) Supprimer lecteur\n3) Afficher les informations d'un lecteur \n4) Affichage des lecteurs par ordre alphabétique\n5) Affichage des lecteurs selon leur identifiant de lecteur\n6) Sauvegarder le fichier des lecteurs\n7) Modifier une adresse\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c",&menu);
 	return menu;
 }
 
+int MenuOuvrage(void)
 
+{
+	int menu;
+	printf("\n1) Insérer un nouvel ouvrage\n2) Afficher la liste des ouvrages\n3) Sauvegarder le fichier des ouvrages\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	scanf("%d%*c",&menu);
+	return menu;
+}
+
+int MenuEmprunt(void)
+
+{
+	int menu;
+	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts (terminés ou non)\n3) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	scanf("%d%*c",&menu);
+	return menu;
+}
+
+//fonctions d'insertion d'un lecteur dans une liste à 2 pointeurs
 
 int ExisteNumLec(ListeLecteur listeLNum,char NumLecteur[])
 
@@ -151,11 +184,12 @@ ListeLecteur insererLec(ListeLecteur listeLNum ,ListeLecteur *listeLNom , Lecteu
     return listeLNum;
 }
 
-ListeLecteur ajouterLecteurAuClavier (Lecteur Lec,ListeLecteur listeLNum,ListeLecteur *listeLNom)
+ListeLecteur ajouterLecteurAuClavier (ListeLecteur listeLNum,ListeLecteur *listeLNom)
 
 {
 	int choix,trouve;
-
+	Lecteur Lec;
+	
 	printf("Nom ?\n");
 	fgets(Lec.nom,28,stdin);
 	Lec.nom[strlen(Lec.nom)-1]='\0';
@@ -199,8 +233,7 @@ ListeLecteur ajouterLecteurAuClavier (Lecteur Lec,ListeLecteur listeLNum,ListeLe
 	return listeLNum;
 }
 
-
-
+//fonctions d'affichage d'informations sur les lecteurs
 
 void afficherLec(ListeLecteur listeL,int menu)
 {
@@ -228,6 +261,7 @@ void AffichInfosLec(ListeLecteur listeLNum)
 	aux=rechercheNum(NumLecRech,&trouve,listeLNum,c) ;
 }
 
+//fonctions de suppression d'un lecteur dans une liste à 2 pointeurs
 
 ListeLecteur rechercheNum(char numLecteur[], int *trouve , ListeLecteur listeLNum,char c)
 {
@@ -297,8 +331,10 @@ ListeLecteur supprimerEnTete(ListeLecteur ListeASup,int idListe)
 	if (idListe==0)
 		ListeASup=ListeASup->suivNum;
 	else
+	{
 		ListeASup=ListeASup->suivNom;
-	free(aux);
+		free(aux);
+	}
 	return ListeASup;
 }
 
@@ -324,7 +360,6 @@ ListeLecteur supprimerLecNom(ListeLecteur ListeLNom , ListeLecteur listeApresRec
 void sauvegardeLecteur(ListeLecteur listeLNum)
 
 {
-	Lecteur Lec;
 	FILE *flot;
 	flot=fopen("lecteur.don","w");
 	if (flot==NULL)
@@ -356,7 +391,7 @@ void printLecteur(ListeLecteur listeLNum,FILE *flot)
 	fprintf(flot,"%d\n",listeLNum->l.adresse.numDepartement);
 }
 
-//fonctions de modification d'une adresse
+//fonctions de modification d'une adresse pour un lecteur donné
 
 ListeLecteur menuModifAdresse(ListeLecteur listeLNum)
 
@@ -405,4 +440,226 @@ Adresse rentrerAdresse(ListeLecteur listeLNum)
 	scanf("%d%*c",&a.numDepartement);
 	return a;
 }
+
+
+//FONCTIONS POUR LES OUVRAGES
+
+
+//fonctions de chargement du fichier ouvrage dans un tableau dynamique de pointeurs
+
+Ouvrage **ChargementOuvrage(int *tmax,int *nb)
+
+{
+	Ouvrage **Touv,o,**aux;
+	FILE *flot;
+	flot=fopen("ouvrage.don","r");
+	if (flot==NULL)
+	{	
+		printf("Problème flot\n");
+		fclose(flot);
+		exit(1);
+	}
+	*nb=0;
+	*tmax=5;	
+	Touv=(Ouvrage **)malloc(*tmax*sizeof(Ouvrage *));
+	if (Touv==NULL)
+	{	
+		printf("Problème malloc\n");
+		fclose(flot);
+		exit(1);
+	}
+	o=lireOuvrage(flot);
+	while (!feof(flot))
+	{
+		if (*nb==*tmax)
+		{
+			*tmax=*tmax+5;
+			aux=(Ouvrage **)realloc(Touv,*tmax*sizeof(Ouvrage *));
+			if (aux==NULL)
+			{
+				printf("Problème malloc\n");
+				fclose(flot);
+				exit(1);
+			}
+			Touv=aux;
+		}
+		Touv[*nb]=(Ouvrage *)malloc(sizeof(Ouvrage));
+		if (Touv[*nb]==NULL)
+		{
+			printf("Problème malloc\n");
+			fclose(flot);
+			exit(1);
+		}
+		*Touv[*nb]=o;
+		*nb=*nb+1;
+		o=lireOuvrage(flot);
+	}
+	fclose(flot);
+	return Touv;
+}	
+	
+
+
+
+
+Ouvrage lireOuvrage(FILE *flot)
+
+{
+	Ouvrage o;
+	
+	fscanf(flot,"%s\n",o.cote);
+
+	fgets(o.titre,28,flot);
+	o.titre[strlen(o.titre)-1]='\0';
+	
+	fgets(o.categorie,28,flot);
+	o.categorie[strlen(o.categorie)-1]='\0';
+	return o;
+}
+
+//fonctions d'insertion d'un ouvrage
+
+int rechercheDichotomie(Ouvrage **tab,int nb,char coteRech[])
+
+{
+	int inf,sup,m;
+	inf=0;
+	sup=nb-1;
+	while (inf<=sup)
+	{
+		m=(inf+sup)/2;
+		if (strcmp(coteRech,tab[m]->cote)==0)
+			return -1;
+		if (strcmp(coteRech,tab[m]->cote)>0)
+			inf=m+1;
+		else sup=m-1;
+	}
+	return inf;
+}
+
+Ouvrage **insererOuvrage(Ouvrage **Touv,int *nb,int *tmax)
+
+{
+	Ouvrage o,**aux;
+	int posInsertion,choix;
+	o=ajouterOuvrageAuClavier();
+	posInsertion=rechercheDichotomie(Touv,*nb,o.cote);
+	if (posInsertion==-1)
+	{
+		printf("\n--- ERREUR : UN OUVRAGE PORTE DEJA LA MEME COTE INSERTION IMPOSSIBLE ---\n");
+		return Touv;
+	}
+	printf("\n%s\t%s\t%s",o.cote,o.titre,o.categorie);
+	printf("\nEtes vous sûr de vouloir ajouter cet ouvrage ? (0=Oui/1=Non)\n");
+	scanf("%d%*c",&choix);
+	if (choix==1)
+	{
+		printf("\n--- INSERTION ANNULEE ---\n");
+		return Touv;
+	}
+	if (*nb==*tmax)
+	{
+		*tmax=*tmax+5;
+		aux=(Ouvrage **)realloc(Touv,*tmax*sizeof(Ouvrage *));
+		if (aux==NULL)
+		{
+			printf("Problème malloc\n");
+			exit(1);
+		}
+		Touv=aux;
+	}
+	Touv[*nb]=(Ouvrage *)malloc(sizeof(Ouvrage));
+	if (Touv[*nb]==NULL)
+	{
+		printf("Problème malloc\n");
+		exit(1);
+	}
+	Touv=decalerAdroite(Touv,posInsertion,*nb);
+	*Touv[posInsertion]=o;
+	*nb=*nb+1;
+	printf("\n--- INSERTION CORRECTEMENT EFFECTUEE ---\n");
+	return Touv;
+}
+	
+	
+
+Ouvrage **decalerAdroite(Ouvrage **Touv,int pos,int nb)
+
+{
+	for (nb;nb>pos;nb--)
+		*Touv[nb]=*Touv[nb-1];
+	return Touv;
+}
+
+
+Ouvrage ajouterOuvrageAuClavier(void)
+
+{
+	Ouvrage o;
+
+	printf("Côte de l'ouvrage :\n");
+	scanf("%s%*c",o.cote);
+
+	printf("Titre de l'ouvrage :\n");
+	fgets(o.titre,28,stdin);
+	o.titre[strlen(o.titre)-1]='\0';
+	
+	printf("Catégorie de l'ouvrage :\n");
+	fgets(o.categorie,28,stdin);
+	o.categorie[strlen(o.categorie)-1]='\0';
+	return o;
+}
+
+
+
+//fonctions d'affichage de la liste des livres de la bibliothèque
+
+void afficherOuvrage(Ouvrage **Touv,int nb)
+
+{
+	int i;
+	for (i=0;i<nb;i++)
+		printf("%s\t\t%s\t\t%s\n",Touv[i]->cote,Touv[i]->titre,Touv[i]->categorie);
+}
+
+
+//fonctions de sauvegarde du fichier ouvrage
+
+void sauvegardeOuvrage(Ouvrage **Touv,int nb)
+
+{	
+	int i=0;
+	FILE *flot;
+	flot=fopen("ouvrage.don","w");
+	if (flot==NULL)
+	{
+		printf("Problème flot\n");
+		fclose(flot);	
+		exit(1);
+	}
+	while (i!=nb)
+	{
+		printOuvrage(Touv,flot,i);
+		i=i+1;
+	}
+	printf("\nFichier bien sauvegardé sous 'ouvrage.don'\n"); 
+	fclose(flot);
+}
+
+
+
+void printOuvrage(Ouvrage **Touv,FILE *flot,int i)
+
+{
+	fprintf(flot,"%s\n",Touv[i]->cote);
+	fprintf(flot,"%s\n",Touv[i]->titre);
+	fprintf(flot,"%s\n",Touv[i]->categorie);
+}
+
+
+//FONCTIONS POUR LES EMPRUNT
+
+
+//fonctions de chargement du fichier emprunt
+
 

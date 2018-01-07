@@ -3,9 +3,11 @@
 void test (void)
 {
     ListeLecteur listeLNom , listeLNum;
+    ListeEmprunt listeLEmp;
     Ouvrage **Touv;
 	listeLNom = listeVide();
 	listeLNum = listeVide();
+	listeLEmp = listeVideE();
 	int menu , choixM , tmaxOuvrage, nbOuvrage;
 	char c;
 	system("clear");
@@ -13,6 +15,8 @@ void test (void)
 	printf("Fichier lecteur chargé\n");
 	Touv=ChargementOuvrage(&tmaxOuvrage,&nbOuvrage);
 	printf("Fichier ouvrage chargé\n");
+	listeLEmp=ChargementEmprunt(listeLEmp);
+	printf("Fichier emprunt chargé\n");
 	choixM=MenuPRINCIPAL();
 	while(choixM!=0)
 	{
@@ -65,7 +69,7 @@ void test (void)
 				switch(menu)
 				{
 					case 1 : system("clear");break;
-					case 2 : system("clear");break;
+					case 2 : system("clear");afficherEmprunt(listeLEmp);break;
 					case 3 : system("clear");break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");
@@ -78,6 +82,7 @@ void test (void)
 		choixM=MenuPRINCIPAL();
 
 	}
+	system("clear");
 
 }
 

@@ -58,7 +58,10 @@ typedef struct maillonLecteur {
     struct maillonLecteur *suivNom;
 } MaillonLecteur, *ListeLecteur;
 
-
+typedef struct maillonEmprunt {
+    Emprunt e;
+    struct maillonEmprunt *suivEmprunt;
+}MaillonEmprunt, *ListeEmprunt;
 
 // LISTE FONCTIONS
 
@@ -99,4 +102,11 @@ Ouvrage ajouterOuvrageAuClavier(void);
 void sauvegardeOuvrage(Ouvrage **Touv,int nb);
 void printOuvrage(Ouvrage **Touv,FILE *flot,int i);
 //FONCTIONS EMPRUNT
+ListeEmprunt listeVideE(void);
+ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp);
+Emprunt lireEmprunt(FILE *flot);
+ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
+ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
+void afficherEmprunt(ListeEmprunt listeL);
+
 

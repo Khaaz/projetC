@@ -91,7 +91,7 @@ int MenuEmprunt(void)
 
 {
 	int menu;
-	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts (terminés ou non)\n3) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts en cours\n3) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c",&menu);
 	return menu;
 }
@@ -506,7 +506,7 @@ Ouvrage lireOuvrage(FILE *flot)
 
 {
 	Ouvrage o;
-	
+	char Dispo[15];
 	fscanf(flot,"%s\n",o.cote);
 
 	fgets(o.titre,28,flot);
@@ -514,6 +514,11 @@ Ouvrage lireOuvrage(FILE *flot)
 	
 	fgets(o.categorie,28,flot);
 	o.categorie[strlen(o.categorie)-1]='\0';
+
+	fscanf(flot,"%s",Dispo);
+	if (strcmp(Dispo,"dispo")==0)
+		o.dispo=vrai;
+	else o.dispo=faux;
 	return o;
 }
 
@@ -607,6 +612,8 @@ Ouvrage ajouterOuvrageAuClavier(void)
 	printf("Catégorie de l'ouvrage :\n");
 	fgets(o.categorie,28,stdin);
 	o.categorie[strlen(o.categorie)-1]='\0';
+	
+	o.dispo=vrai;
 	return o;
 }
 
@@ -654,12 +661,107 @@ void printOuvrage(Ouvrage **Touv,FILE *flot,int i)
 	fprintf(flot,"%s\n",Touv[i]->cote);
 	fprintf(flot,"%s\n",Touv[i]->titre);
 	fprintf(flot,"%s\n",Touv[i]->categorie);
+	if (Touv[i]->dispo==vrai)
+		fprintf(flot,"dispo\n");
+	else fprintf(flot,"emprunte\n");
 }
 
 
 //FONCTIONS POUR LES EMPRUNT
 
+ListeEmprunt listeVideE(void)
+
+{
+	return NULL;
+}
 
 //fonctions de chargement du fichier emprunt
+
+
+ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp)
+
+{
+	Emprunt emp;
+	FILE *flot;
+	flot=fopen("emprunt.don","r");
+	if (flot==NULL)
+	{
+		printf("Problème flot\n");
+		fclose(flot);
+		exit(1);
+	}
+	emp=lireEmprunt(flot);
+	listeLEmp=insererEmprunt(listeLEmp,emp);
+	while(!feof(flot))
+	{
+		emp=lireEmprunt(flot);
+		listeLEmp=insererEmprunt(listeLEmp,emp);
+	}
+	fclose(flot);
+	return listeLEmp;
+}
+
+Emprunt lireEmprunt(FILE *flot)
+
+{
+	Emprunt emp;
+	fscanf(flot,"%s%*c\n",emp.cote);
+	fscanf(flot,"%s%*c\n",emp.numLecteur);
+
+	fscanf(flot,"%d/%d/%d%*c\n",&emp.dateEmprunt.jour,&emp.dateEmprunt.mois,&emp.dateEmprunt.annee);
+	return emp;
+	
+	
+}
+
+//fonctions d'insertion d'un emprunt
+
+ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp,Emprunt emp)
+
+{
+	MaillonEmprunt *m;
+	m=(MaillonEmprunt *)malloc(sizeof(MaillonEmprunt));
+	if (m==NULL)
+	{
+		printf("Problème malloc\n");
+		exit(1);
+	}
+	m->e=emp;
+	m->suivEmprunt=listeLEmp;
+	return m;
+}
+
+ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp,Emprunt emp)
+
+{
+	if (listeLEmp==NULL)
+			return ajouterEnTeteEmprunt(listeLEmp,emp);
+	if (strcmp(emp.cote,listeLEmp->e.cote)<0)
+			return ajouterEnTeteEmprunt(listeLEmp,emp);
+	if (strcmp(emp.cote,listeLEmp->e.cote)==0)
+		return listeLEmp;
+	listeLEmp->suivEmprunt=insererEmprunt(listeLEmp->suivEmprunt,emp);
+	return listeLEmp;
+}
+
+
+//fonction d'affichage de la liste des emprunts en cours
+
+
+void afficherEmprunt(ListeEmprunt listeL)
+{
+    printf("\n-----------------------------------------------------------------------------------------------------\n");
+    printf("Cote\t\tLecteur\tdateEmprunt\n\n");
+    while(listeL != NULL )
+    {
+    	printf("%s\t%s\t%d/%d/%d\n",listeL->e.cote,listeL->e.numLecteur,listeL->e.dateEmprunt.jour,listeL->e.dateEmprunt.mois,listeL->e.dateEmprunt.annee);
+	listeL=listeL->suivEmprunt;
+    }
+    printf("-----------------------------------------------------------------------------------------------------\n");
+
+}
+
+
+
 
 

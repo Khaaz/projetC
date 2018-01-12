@@ -110,5 +110,11 @@ ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp ,Ouvrage **Touv , List
 int existeOuvrage(Ouvrage **Touv , char cote[] ,int nbOuv);
 void sauvegardeEmprunt(ListeEmprunt listeLEmp);
 void printEmprunt(ListeEmprunt listeLEmp,FILE *flot);
+ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp ,Ouvrage **Touv , int nbOuv);
+int compareDate(Date d1 , Date d2);
+ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp , char cote[] );
+ListeEmprunt Suppentete(ListeEmprunt listeLEmp );
+ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[]);
+
 
 

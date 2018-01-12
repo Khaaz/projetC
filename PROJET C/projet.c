@@ -834,7 +834,6 @@ void sauvegardeEmprunt(ListeEmprunt listeLEmp)
 }
 
 
-
 void printEmprunt(ListeEmprunt listeLEmp,FILE *flot)
 
 {
@@ -844,21 +843,91 @@ void printEmprunt(ListeEmprunt listeLEmp,FILE *flot)
 }
 
 
+//fonction date de retour
+
+ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp ,Ouvrage **Touv , int nbOuv)
+{
+	ListeEmprunt aux;
+	Date dateretour;
+	int joursEmp , rangOuv;
+	char cote[11],c;
+	printf("Cote de l'ouvrage ?\n");
+	scanf("%s%*c",cote);
+	rangOuv=existeOuvrage(Touv , cote , nbOuv );
+	if(rangOuv==-1)
+	{
+		printf("ouvrage introuvable");
+		return listeLEmp ;
+	}
+	if(Touv[rangOuv]->dispo==vrai)
+	{
+		printf("Ouvrage déja disponible");
+		return listeLEmp;
+	}
+	aux=trouverEmprunt(listeLEmp , cote);
+	printf("Date de retour ? (jj/mm/yyyy)\n");
+	scanf("%d/%d/%d%*c",&(dateretour.jour),&(dateretour.mois),&(dateretour.annee) );
+	joursEmp=compareDate(listeLEmp->e.dateEmprunt,dateretour);
+	while(joursEmp<0)
+	{
+		printf("Date incohérente !! Date de retour ? (jj/mm/yyyy)\n");
+		scanf("%d/%d/%d%*c",&(dateretour.jour),&(dateretour.mois),&(dateretour.annee) );
+		joursEmp=compareDate(listeLEmp->e.dateEmprunt,dateretour);
+	}
+	if(joursEmp > 15 )
+		printf("Délais de 15 jours non respecté ! Le lecteur doit payer une amande !");
+	c=getchar();
+	return SuppEmp(listeLEmp,cote);
+}
 
 
 
+//fonction compare date
+
+int compareDate(Date d1 , Date d2)
+{
+	int dateJ1,dateJ2,result;
+	dateJ1=(d1.jour)+((d1.mois)*30)+((d1.annee)*365);
+	dateJ2=(d2.jour)+((d2.mois)*30)+((d2.annee)*365);
+	result=dateJ2-dateJ1;
+	return result;
+}
 
 
 
+ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp , char cote[] )
+{
+	if(strcmp(cote,listeLEmp->e.cote)==0)
+		return listeLEmp;
+	return trouverEmprunt(listeLEmp->suivEmprunt , cote );
+}
 
 
+//supprimer en tete
 
+ListeEmprunt Suppentete(ListeEmprunt listeLEmp )
+{
+	MaillonEmprunt *aux;
+	if(listeLEmp==NULL)
+		{
+		printf("OP interdite");
+		exit(1);
+		}
+	aux=listeLEmp;
+	listeLEmp=listeLEmp->suivEmprunt;
+	free(aux);
+	return listeLEmp;
+}
 
-
-
-
-
-
+ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[])
+{
+	if(listeLEmp==NULL)
+		return listeLEmp;
+	if(strcmp(cote,listeLEmp->e.cote)==0)
+		return Suppentete(listeLEmp);
+	listeLEmp->suivEmprunt=SuppEmp(listeLEmp->suivEmprunt,cote);
+	return listeLEmp;
+}
 
 
 

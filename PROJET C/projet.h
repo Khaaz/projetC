@@ -37,7 +37,6 @@ typedef struct {
     char nom[30];
     char prenom[30];
     Adresse adresse;
-    Emprunt *TabEmprunt[4]; //tableau qui liste les emprunts en cours
 } Lecteur;
 
 typedef struct {
@@ -45,7 +44,6 @@ typedef struct {
     char titre[30];
     char categorie[30];
     Booleen dispo; // Ouvrage dispo ou pas
-    Emprunt *e; // si ouvrage non dispo ==> donnée de l'emprunt en cours
 } Ouvrage;
 
 
@@ -108,5 +106,7 @@ Emprunt lireEmprunt(FILE *flot);
 ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
 ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
 void afficherEmprunt(ListeEmprunt listeL);
+ListeEmprunt insererClavierEmpreint(ListeEmprunt listeLEmp ,Ouvrage **Touv , ListeLecteur listeLNum , int nbOuv);
+int existeOuvrage(Ouvrage **Touv , char cote[] ,int nbOuv);
 
 

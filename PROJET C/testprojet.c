@@ -30,7 +30,7 @@ void test (void)
 				{
 					case 1 : system("clear");listeLNum=ajouterLecteurAuClavier(listeLNum,&listeLNom);break;
 					case 2 : system("clear");system("clear");listeLNum=SupprimerGENERAL(listeLNum,&listeLNom);break;
-					case 3 : system("clear");system("clear");AffichInfosLec(listeLNum);break;
+					case 3 : system("clear");AffichInfosLec(listeLNum);break;
 					case 4 : system("clear");afficherLec(listeLNom,menu) ;break;
 					case 5 : system("clear");afficherLec(listeLNum,menu) ;break;
 					case 6 : system("clear");sauvegardeLecteur(listeLNum);break;
@@ -68,9 +68,10 @@ void test (void)
 			{
 				switch(menu)
 				{
-					case 1 : system("clear");break;
+					case 1 : system("clear");listeLEmp=insererClavierEmpreint(listeLEmp,Touv,listeLNum,nbOuvrage);break;
 					case 2 : system("clear");afficherEmprunt(listeLEmp);break;
 					case 3 : system("clear");break;
+					case 4 : system("clear");break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");
 				c=getchar();

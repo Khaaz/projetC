@@ -82,7 +82,7 @@ int MenuOuvrage(void)
 
 {
 	int menu;
-	printf("\n1) Insérer un nouvel ouvrage\n2) Afficher la liste des ouvrages\n3) Sauvegarder le fichier des ouvrages\n4)Enregistrer un retour\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Insérer un nouvel ouvrage\n2) Afficher la liste des ouvrages\n3) Sauvegarder le fichier des ouvrages\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c",&menu);
 	return menu;
 }
@@ -91,7 +91,7 @@ int MenuEmprunt(void)
 
 {
 	int menu;
-	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts en cours\n3) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts en cours\n3) Enregistrer une date de retour\n4) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c",&menu);
 	return menu;
 }
@@ -744,32 +744,32 @@ ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp,Emprunt emp)
 	return listeLEmp;
 }
 
-ListeEmprunt insererClavierEmpreint(ListeEmprunt listeLEmp ,Ouvrage **Touv , ListeLecteur listeLNum , int nbOuv)
+ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp ,Ouvrage **Touv , ListeLecteur listeLNum , int nbOuv)
 {
 	Emprunt emp ;
 	int rangOuv , trouve;
-	printf("Référence de l'empreinteur ?\n");
+	printf("Référence de l'emprunteur ?\n");
 	scanf("%s%*c",emp.numLecteur);
 	trouve=ExisteNumLec(listeLNum,emp.numLecteur);
 	if(trouve==0)
 	{
-	printf("Lecteur introuvable");
-	return listeLEmp;
+		printf("Lecteur introuvable");
+		return listeLEmp;
 	}
 	printf("Cote de l'ouvrage ?\n");
 	scanf("%s%*c",emp.cote);
 	rangOuv=existeOuvrage(Touv , emp.cote , nbOuv );
 	if(rangOuv==-1)
 	{
-	printf("ouvrage introuvable");
-	return listeLEmp ;
+		printf("ouvrage introuvable");
+		return listeLEmp ;
 	}
 	if(Touv[rangOuv]->dispo==faux)
 	{
-	printf("Ouvrage indisponible désolé");
-	return listeLEmp;
+		printf("Ouvrage indisponible désolé");
+		return listeLEmp;
 	}
-	printf("Date de l'empreint ? (jj/mm/yyyy)\n");
+	printf("Date de l'emprunt ? (jj/mm/yyyy)\n");
 	scanf("%d/%d/%d%*c",&(emp.dateEmprunt.jour),&(emp.dateEmprunt.mois),&(emp.dateEmprunt.annee) );
 	Touv[rangOuv]->dispo=faux;
 	listeLEmp=insererEmprunt(listeLEmp,emp);
@@ -811,7 +811,37 @@ int existeOuvrage(Ouvrage **Touv , char cote[] ,int nbOuv)
 	return -1;
 }
 
+//fonctions de sauvegarde du fichier emprunt
 
+void sauvegardeEmprunt(ListeEmprunt listeLEmp)
+
+{
+	FILE *flot;
+	flot=fopen("emprunt.don","w");
+	if (flot==NULL)
+	{
+		printf("Problème flot\n");
+		fclose(flot);	
+		exit(1);
+	}
+	while (listeLEmp!=NULL)
+	{
+		printEmprunt(listeLEmp,flot);
+		listeLEmp=listeLEmp->suivEmprunt;
+	}
+	printf("\nFichier bien sauvegardé sous 'emprunt.don'\n"); 
+	fclose(flot);
+}
+
+
+
+void printEmprunt(ListeEmprunt listeLEmp,FILE *flot)
+
+{
+	fprintf(flot,"%s\n",listeLEmp->e.cote);
+	fprintf(flot,"%s\n",listeLEmp->e.numLecteur);
+	fprintf(flot,"%d/%d/%d\n",listeLEmp->e.dateEmprunt.jour,listeLEmp->e.dateEmprunt.mois,listeLEmp->e.dateEmprunt.annee);
+}
 
 
 

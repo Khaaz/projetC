@@ -106,7 +106,9 @@ Emprunt lireEmprunt(FILE *flot);
 ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
 ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp,Emprunt emp);
 void afficherEmprunt(ListeEmprunt listeL);
-ListeEmprunt insererClavierEmpreint(ListeEmprunt listeLEmp ,Ouvrage **Touv , ListeLecteur listeLNum , int nbOuv);
+ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp ,Ouvrage **Touv , ListeLecteur listeLNum , int nbOuv);
 int existeOuvrage(Ouvrage **Touv , char cote[] ,int nbOuv);
+void sauvegardeEmprunt(ListeEmprunt listeLEmp);
+void printEmprunt(ListeEmprunt listeLEmp,FILE *flot);
 
 

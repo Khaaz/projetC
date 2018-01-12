@@ -68,10 +68,10 @@ void test (void)
 			{
 				switch(menu)
 				{
-					case 1 : system("clear");listeLEmp=insererClavierEmpreint(listeLEmp,Touv,listeLNum,nbOuvrage);break;
+					case 1 : system("clear");listeLEmp=insererClavierEmprunt(listeLEmp,Touv,listeLNum,nbOuvrage);break;
 					case 2 : system("clear");afficherEmprunt(listeLEmp);break;
 					case 3 : system("clear");break;
-					case 4 : system("clear");break;
+					case 4 : system("clear");sauvegardeEmprunt(listeLEmp);break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");
 				c=getchar();

@@ -113,7 +113,7 @@ void global(void)
 					break;
 				case 4:
 					system("clear");
-					sauvegardeEmprunt(listeLEmp);
+					sauvegardeEmprunt(listeLEmp);sauvegardeOuvrage(Touv,nbOuvrage);
 					break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");

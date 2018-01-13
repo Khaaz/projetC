@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
-system("date >> date.txt")
-*/
+
+
+
 
 //struct generale
 typedef enum { faux, vrai } Booleen;
@@ -30,7 +30,6 @@ typedef struct
     char cote[11];
     char numLecteur[6];
     Date dateEmprunt;
-    Date *dateRetour;
 } Emprunt;
 
 typedef struct

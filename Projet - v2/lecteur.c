@@ -2,19 +2,21 @@
 
 //FONCTIONS POUR LES LECTEURS
 
-// fonction d'initialisation de Liste Lecteur
-
+// initialisation
+//
 ListeLecteur listeVide(void)
 {
 	return NULL;
 }
 
-//fonctions de chargement des lecteurs dans une liste
-
+// chargement
+//
 ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom)
 {
+	//var
 	Lecteur Lec;
 	FILE *flot;
+	//
 	flot = fopen("lecteur.don", "r");
 	if (flot == NULL)
 	{
@@ -35,8 +37,9 @@ ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom)
 
 Lecteur lireLecteur(FILE *flot)
 {
+	//var
 	Lecteur Lec;
-
+	//
 	fscanf(flot, "%s\n", Lec.numLecteur);
 
 	fgets(Lec.nom, 28, flot);
@@ -55,15 +58,29 @@ Lecteur lireLecteur(FILE *flot)
 	return Lec;
 }
 
-//fonctions d'insertion d'un lecteur dans une liste à 2 pointeurs
-
-int ExisteNumLec(ListeLecteur listeLNum, char NumLecteur[])
+ListeLecteur insererLec(ListeLecteur listeLNum, ListeLecteur *listeLNom, Lecteur lec) //inserer lecteur dans une liste a deux poiteurs
 {
-	if (listeLNum == NULL)
-		return 0;
-	if (strcmp(NumLecteur, listeLNum->l.numLecteur) == 0)
-		return 1;
-	return ExisteNumLec(listeLNum->suivNum, NumLecteur);
+	//var
+	MaillonLecteur *m;
+	int trouve = 0;
+	//
+	m = (MaillonLecteur *)malloc(sizeof(MaillonLecteur));
+	if (m == NULL)
+	{
+		printf("Problème malloc\n");
+		exit(1);
+	}
+	m->l = lec;
+	listeLNum = insererLecNum(listeLNum, m, &trouve);
+
+	if (trouve == 0)
+	{
+		*listeLNom = insererLecNom(*listeLNom, m);
+	}
+	else
+		free(m);
+
+	return listeLNum;
 }
 
 ListeLecteur insererLecNum(ListeLecteur listeL, MaillonLecteur *m, int *trouve)
@@ -115,34 +132,14 @@ ListeLecteur insererLecNom(ListeLecteur listeL, MaillonLecteur *m)
 	return listeL;
 }
 
-ListeLecteur insererLec(ListeLecteur listeLNum, ListeLecteur *listeLNom, Lecteur lec)
-{
-	MaillonLecteur *m;
-	int trouve = 0;
-	m = (MaillonLecteur *)malloc(sizeof(MaillonLecteur));
-	if (m == NULL)
-	{
-		printf("Problème malloc\n");
-		exit(1);
-	}
-	m->l = lec;
-	listeLNum = insererLecNum(listeLNum, m, &trouve);
-
-	if (trouve == 0)
-	{
-		*listeLNom = insererLecNom(*listeLNom, m);
-	}
-	else
-		free(m);
-
-	return listeLNum;
-}
-
+// Insertion
+//
 ListeLecteur ajouterLecteurAuClavier(ListeLecteur listeLNum, ListeLecteur *listeLNom)
 {
+	//var
 	int choix, trouve;
 	Lecteur Lec;
-
+	//
 	printf("Nom ?\n");
 	fgets(Lec.nom, 28, stdin);
 	Lec.nom[strlen(Lec.nom) - 1] = '\0';
@@ -186,33 +183,44 @@ ListeLecteur ajouterLecteurAuClavier(ListeLecteur listeLNum, ListeLecteur *liste
 	return listeLNum;
 }
 
-//fonctions d'affichage d'informations sur les lecteurs
-
-void afficherLec(ListeLecteur listeL, int menu)
+int ExisteNumLec(ListeLecteur listeLNum, char NumLecteur[])
 {
-	printf("\n-----------------------------------------------------------------------------------------------------\n");
-	while (listeL != NULL)
-	{
-		printf("%s\t%s\t%s\t%d %s %s %d\n", listeL->l.numLecteur, listeL->l.nom, listeL->l.prenom, listeL->l.adresse.numRue, listeL->l.adresse.nomRue, listeL->l.adresse.ville, listeL->l.adresse.numDepartement);
-		if (menu == 4)
-			listeL = listeL->suivNom;
-		else
-			listeL = listeL->suivNum;
-	}
-	printf("-----------------------------------------------------------------------------------------------------\n");
+	if (listeLNum == NULL)
+		return 0;
+	if (strcmp(NumLecteur, listeLNum->l.numLecteur) == 0)
+		return 1;
+	return ExisteNumLec(listeLNum->suivNum, NumLecteur);
 }
 
-void AffichInfosLec(ListeLecteur listeLNum)
+//Suppresion
+//
+ListeLecteur SupprimerGENERAL(ListeLecteur ListeLNum, ListeLecteur *ListeLNom)
 {
-	ListeLecteur aux;
+	//var
 	char NumLecRech[6], c;
-	int trouve;
-	printf("Numéro de Lecteur ?\n");
+	int trouve, choix;
+	ListeLecteur aux1, aux2;
+	// 
+	printf("\n\tNuméro de Lecteur ?\n");
 	scanf("%s", NumLecRech);
-	aux = rechercheNum(NumLecRech, &trouve, listeLNum, c);
-}
 
-//fonctions de suppression d'un lecteur dans une liste à 2 pointeurs
+	aux1 = rechercheNum(NumLecRech, &trouve, ListeLNum, c);
+	if (trouve == 1)
+	{
+		printf("\nEtes vous sûr de vouloir supprimer ce lecteur (0=Oui/1=Non)\n");
+		scanf("%d%*c", &choix);
+		if (choix == 0)
+		{
+			aux2 = rechercheNom(NumLecRech, *ListeLNom);
+			ListeLNum = supprimerLecNum(ListeLNum, aux1);
+			*ListeLNom = supprimerLecNom(*ListeLNom, aux2);
+			printf("\n--- LECTEUR CORRECTEMENT SUPPRIME ---\n");
+		}
+		else
+			printf("\n--- LECTEUR NON SUPPRIME ---\n");
+	}
+	return ListeLNum;
+}
 
 ListeLecteur rechercheNum(char numLecteur[], int *trouve, ListeLecteur listeLNum, char c)
 {
@@ -241,37 +249,27 @@ ListeLecteur rechercheNom(char numLecteur[], ListeLecteur listeLNom)
 	return rechercheNom(numLecteur, listeLNom->suivNom);
 }
 
-ListeLecteur SupprimerGENERAL(ListeLecteur ListeLNum, ListeLecteur *ListeLNom)
+ListeLecteur supprimerLecNum(ListeLecteur ListeLNum, ListeLecteur listeApresRech) //suppresion num
 {
-	char NumLecRech[6], c;
-	int trouve, choix;
-	ListeLecteur aux1, aux2;
-	printf("\n\tNuméro de Lecteur ?\n");
-	scanf("%s", NumLecRech);
-
-	aux1 = rechercheNum(NumLecRech, &trouve, ListeLNum, c);
-	if (aux1 != NULL)
-		aux2 = rechercheNom(NumLecRech, *ListeLNom);
-
-	if (trouve == 1)
-	{
-		printf("\nEtes vous sûr de vouloir supprimer ce lecteur (0=Oui/1=Non)\n");
-		scanf("%d%*c", &choix);
-		if (choix == 0)
-		{
-			ListeLNum = supprimerLecNum(ListeLNum, aux1);
-			*ListeLNom = supprimerLecNom(*ListeLNom, aux2);
-			printf("\n--- LECTEUR CORRECTEMENT SUPPRIME ---\n");
-		}
-		else
-			printf("\n--- LECTEUR NON SUPPRIME ---\n");
-	}
+	if (ListeLNum == listeApresRech)
+		return supprimerEnTete(ListeLNum, 0);
+	ListeLNum->suivNum = supprimerLecNum(ListeLNum->suivNum, listeApresRech);
 	return ListeLNum;
+}
+
+ListeLecteur supprimerLecNom(ListeLecteur ListeLNom, ListeLecteur listeApresRech) //suppresion nom
+{
+	if (ListeLNom == listeApresRech)
+		return supprimerEnTete(ListeLNom, 1);
+	ListeLNom->suivNom = supprimerLecNom(ListeLNom->suivNom, listeApresRech);
+	return ListeLNom;
 }
 
 ListeLecteur supprimerEnTete(ListeLecteur ListeASup, int idListe)
 {
+	//var
 	MaillonLecteur *aux;
+	//
 	if (ListeASup == NULL)
 	{
 		printf("Opération impossible\n");
@@ -288,27 +286,43 @@ ListeLecteur supprimerEnTete(ListeLecteur ListeASup, int idListe)
 	return ListeASup;
 }
 
-ListeLecteur supprimerLecNum(ListeLecteur ListeLNum, ListeLecteur listeApresRech)
+// Affichage 1 lecteur
+//
+void AffichInfosLec(ListeLecteur listeLNum)
 {
-	if (ListeLNum == listeApresRech)
-		return supprimerEnTete(ListeLNum, 0);
-	ListeLNum->suivNum = supprimerLecNum(ListeLNum->suivNum, listeApresRech);
-	return ListeLNum;
+	//var
+	ListeLecteur aux;
+	char NumLecRech[6], c;
+	int trouve;
+	//
+	printf("Numéro de Lecteur ?\n");
+	scanf("%s", NumLecRech);
+	aux = rechercheNum(NumLecRech, &trouve, listeLNum, c);
 }
 
-ListeLecteur supprimerLecNom(ListeLecteur ListeLNom, ListeLecteur listeApresRech)
+// Affichage all lecteurs
+//
+void afficherLec(ListeLecteur listeL, int menu)
 {
-	if (ListeLNom == listeApresRech)
-		return supprimerEnTete(ListeLNom, 1);
-	ListeLNom->suivNom = supprimerLecNom(ListeLNom->suivNom, listeApresRech);
-	return ListeLNom;
+	printf("\n-----------------------------------------------------------------------------------------------------\n");
+	while (listeL != NULL)
+	{
+		printf("%s\t%s\t%s\t%d %s %s %d\n", listeL->l.numLecteur, listeL->l.nom, listeL->l.prenom, listeL->l.adresse.numRue, listeL->l.adresse.nomRue, listeL->l.adresse.ville, listeL->l.adresse.numDepartement);
+		if (menu == 4)
+			listeL = listeL->suivNom;
+		else
+			listeL = listeL->suivNum;
+	}
+	printf("-----------------------------------------------------------------------------------------------------\n");
 }
 
-//fonctions de sauvegarde du fichier lecteur
-
+// Sauvegarde
+//
 void sauvegardeLecteur(ListeLecteur listeLNum)
 {
+	//var
 	FILE *flot;
+	//
 	flot = fopen("lecteur.don", "w");
 	if (flot == NULL)
 	{
@@ -336,13 +350,15 @@ void printLecteur(ListeLecteur listeLNum, FILE *flot)
 	fprintf(flot, "%d\n", listeLNum->l.adresse.numDepartement);
 }
 
-//fonctions de modification d'une adresse pour un lecteur donné
-
+// Modification address
+//
 ListeLecteur menuModifAdresse(ListeLecteur listeLNum)
 {
+	//var
 	char NumLecRech[6], c;
 	int trouve;
-	ListeLecteur aux1, aux2;
+	ListeLecteur aux1;
+	//
 	printf("\nDe quel lecteur voulez vous modifier l'adresse (Entrez son numéro de lecteur :)\n");
 	scanf("%s", NumLecRech);
 	aux1 = rechercheNum(NumLecRech, &trouve, listeLNum, c);
@@ -366,7 +382,9 @@ ListeLecteur modifAdresse(ListeLecteur listeLNum, ListeLecteur listeApresRech)
 
 Adresse rentrerAdresse(ListeLecteur listeLNum)
 {
+	//var
 	Adresse a;
+	//
 	printf("Nouvelle ville :\n");
 	fgets(a.ville, 28, stdin);
 	a.ville[strlen(a.ville) - 1] = '\0';

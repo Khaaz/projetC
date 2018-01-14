@@ -13,8 +13,10 @@ ListeEmprunt listeVideE(void)
 //
 ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp)
 {
+	//var
 	Emprunt emp;
 	FILE *flot;
+	//
 	flot = fopen("emprunt.don", "r");
 	if (flot == NULL)
 	{
@@ -35,7 +37,9 @@ ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp)
 
 Emprunt lireEmprunt(FILE *flot)
 {
+	//var
 	Emprunt emp;
+	//
 	fscanf(flot, "%s%*c\n", emp.cote);
 	fscanf(flot, "%s%*c\n", emp.numLecteur);
 
@@ -57,7 +61,9 @@ ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
 
 ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
 {
+	//var
 	MaillonEmprunt *m;
+	//
 	m = (MaillonEmprunt *)malloc(sizeof(MaillonEmprunt));
 	if (m == NULL)
 	{
@@ -73,8 +79,10 @@ ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
 //
 ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv)
 {
+	//var
 	Emprunt emp;
 	int rangOuv, trouve;
+	//
 	printf("Référence de l'emprunteur ?\n");
 	scanf("%s%*c", emp.numLecteur);
 	trouve = ExisteNumLec(listeLNum, emp.numLecteur);
@@ -111,7 +119,9 @@ ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, Liste
 
 int existeOuvrage(Ouvrage **Touv, char cote[], int nbOuv)
 {
+	//var
 	int i;
+	//
 	for (i = 0; i < nbOuv; i++)
 	{
 		if (strcmp(cote, Touv[i]->cote) == 0)
@@ -140,11 +150,13 @@ void afficherEmprunt(ListeEmprunt listeL)
 //
 ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv)
 {
+	//var
 	system("date +%d/%m/%Y > date.txt");
 	MaillonEmprunt *aux;
 	Date dateretour;
 	int joursEmp, rangOuv;
 	char cote[11];
+	//
 	printf("Cote de l'ouvrage ?\n");
 	scanf("%s%*c", cote);
 	rangOuv = existeOuvrage(Touv, cote, nbOuv);
@@ -186,7 +198,9 @@ ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp, char cote[])
 
 int compareDate(Date d1, Date d2)
 {
+	//var
 	int dateJ1, dateJ2, result;
+	//
 	dateJ1 = (d1.jour) + ((d1.mois) * 30) + ((d1.annee) * 365);
 	dateJ2 = (d2.jour) + ((d2.mois) * 30) + ((d2.annee) * 365);
 	result = dateJ2-dateJ1;
@@ -205,7 +219,9 @@ ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[])
 
 ListeEmprunt Suppentete(ListeEmprunt listeLEmp)
 {
+	//var
 	MaillonEmprunt *aux;
+	//
 	if (listeLEmp == NULL)
 	{
 		printf("OP interdite");
@@ -221,7 +237,9 @@ ListeEmprunt Suppentete(ListeEmprunt listeLEmp)
 //
 void sauvegardeEmprunt(ListeEmprunt listeLEmp)
 {
+	//var
 	FILE *flot;
+	//
 	flot = fopen("emprunt.don", "w");
 	if (flot == NULL)
 	{

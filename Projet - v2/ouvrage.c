@@ -2,12 +2,14 @@
 
 //FONCTIONS POUR LES OUVRAGES
 
-//fonctions de chargement du fichier ouvrage dans un tableau dynamique de pointeurs
-
+// chargement
+//
 Ouvrage **ChargementOuvrage(int *tmax, int *nb)
 {
+	//var
 	Ouvrage **Touv, o, **aux;
 	FILE *flot;
+	//
 	flot = fopen("ouvrage.don", "r");
 	if (flot == NULL)
 	{
@@ -56,8 +58,10 @@ Ouvrage **ChargementOuvrage(int *tmax, int *nb)
 
 Ouvrage lireOuvrage(FILE *flot)
 {
+	//var
 	Ouvrage o;
 	char Dispo[15];
+	//
 	fscanf(flot, "%s\n", o.cote);
 
 	fgets(o.titre, 28, flot);
@@ -74,35 +78,19 @@ Ouvrage lireOuvrage(FILE *flot)
 	return o;
 }
 
-//fonctions d'insertion d'un ouvrage
-
-int rechercheDichotomie(Ouvrage **tab, int nb, char coteRech[])
-{
-	int inf, sup, m;
-	inf = 0;
-	sup = nb - 1;
-	while (inf <= sup)
-	{
-		m = (inf + sup) / 2;
-		if (strcmp(coteRech, tab[m]->cote) == 0)
-			return -1;
-		if (strcmp(coteRech, tab[m]->cote) > 0)
-			inf = m + 1;
-		else
-			sup = m - 1;
-	}
-	return inf;
-}
-
+// Insertion
+//
 Ouvrage **insererOuvrage(Ouvrage **Touv, int *nb, int *tmax)
 {
+	//var
 	Ouvrage o, **aux;
 	int posInsertion, choix;
+	//
 	o = ajouterOuvrageAuClavier();
 	posInsertion = rechercheDichotomie(Touv, *nb, o.cote);
 	if (posInsertion == -1)
 	{
-		printf("\n--- ERREUR : UN OUVRAGE PORTE DEJA LA MEME COTE INSERTION IMPOSSIBLE ---\n");
+		printf("\n--- ERREUR : UN OUVRAGE PORTE DEJA LA MEME COTE, INSERTION IMPOSSIBLE ---\n");
 		return Touv;
 	}
 	printf("\n%s\t%s\t%s", o.cote, o.titre, o.categorie);
@@ -137,17 +125,11 @@ Ouvrage **insererOuvrage(Ouvrage **Touv, int *nb, int *tmax)
 	return Touv;
 }
 
-Ouvrage **decalerAdroite(Ouvrage **Touv, int pos, int nb)
-{
-	for (nb; nb > pos; nb--)
-		*Touv[nb] = *Touv[nb - 1];
-	return Touv;
-}
-
 Ouvrage ajouterOuvrageAuClavier(void)
 {
+	//var
 	Ouvrage o;
-
+	//
 	printf("Côte de l'ouvrage :\n");
 	scanf("%s%*c", o.cote);
 
@@ -163,21 +145,52 @@ Ouvrage ajouterOuvrageAuClavier(void)
 	return o;
 }
 
-//fonctions d'affichage de la liste des livres de la bibliothèque
+int rechercheDichotomie(Ouvrage **tab, int nb, char coteRech[])
+{
+	//var
+	int inf, sup, m;
+	//
+	inf = 0;
+	sup = nb - 1;
+	while (inf <= sup)
+	{
+		m = (inf + sup) / 2;
+		if (strcmp(coteRech, tab[m]->cote) == 0)
+			return -1;
+		if (strcmp(coteRech, tab[m]->cote) > 0)
+			inf = m + 1;
+		else
+			sup = m - 1;
+	}
+	return inf;
+}
 
+Ouvrage **decalerAdroite(Ouvrage **Touv, int pos, int nb)
+{
+	for (nb; nb > pos; nb--)
+		*Touv[nb] = *Touv[nb - 1];
+	return Touv;
+}
+
+// Affichage
+//
 void afficherOuvrage(Ouvrage **Touv, int nb)
 {
+	//var
 	int i;
+	//
 	for (i = 0; i < nb; i++)
 		printf("%s\t\t%s\t\t%s\n", Touv[i]->cote, Touv[i]->titre, Touv[i]->categorie);
 }
 
-//fonctions de sauvegarde du fichier ouvrage
-
+// sauvegarder
+//
 void sauvegardeOuvrage(Ouvrage **Touv, int nb)
 {
+	//var
 	int i = 0;
 	FILE *flot;
+	//
 	flot = fopen("ouvrage.don", "w");
 	if (flot == NULL)
 	{

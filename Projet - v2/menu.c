@@ -29,7 +29,7 @@ int MenuOuvrage(void)
 int MenuEmprunt(void)
 {
 	int menu;
-	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts en cours\n3) Enregistrer une date de retour\n4) Sauvegarder le fichier des emprunts\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Enregistrer un nouvel emprunt\n2) Consulter la liste des emprunts en cours\n3) Enregistrer une date de retour\n4) Sauvegarder le fichier des emprunts et des ouvrages\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c", &menu);
 	return menu;
 }

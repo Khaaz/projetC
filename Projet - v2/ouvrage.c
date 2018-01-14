@@ -5,7 +5,6 @@
 //fonctions de chargement du fichier ouvrage dans un tableau dynamique de pointeurs
 
 Ouvrage **ChargementOuvrage(int *tmax, int *nb)
-
 {
 	Ouvrage **Touv, o, **aux;
 	FILE *flot;
@@ -56,7 +55,6 @@ Ouvrage **ChargementOuvrage(int *tmax, int *nb)
 }
 
 Ouvrage lireOuvrage(FILE *flot)
-
 {
 	Ouvrage o;
 	char Dispo[15];
@@ -79,7 +77,6 @@ Ouvrage lireOuvrage(FILE *flot)
 //fonctions d'insertion d'un ouvrage
 
 int rechercheDichotomie(Ouvrage **tab, int nb, char coteRech[])
-
 {
 	int inf, sup, m;
 	inf = 0;
@@ -98,7 +95,6 @@ int rechercheDichotomie(Ouvrage **tab, int nb, char coteRech[])
 }
 
 Ouvrage **insererOuvrage(Ouvrage **Touv, int *nb, int *tmax)
-
 {
 	Ouvrage o, **aux;
 	int posInsertion, choix;
@@ -142,7 +138,6 @@ Ouvrage **insererOuvrage(Ouvrage **Touv, int *nb, int *tmax)
 }
 
 Ouvrage **decalerAdroite(Ouvrage **Touv, int pos, int nb)
-
 {
 	for (nb; nb > pos; nb--)
 		*Touv[nb] = *Touv[nb - 1];
@@ -150,7 +145,6 @@ Ouvrage **decalerAdroite(Ouvrage **Touv, int pos, int nb)
 }
 
 Ouvrage ajouterOuvrageAuClavier(void)
-
 {
 	Ouvrage o;
 
@@ -172,7 +166,6 @@ Ouvrage ajouterOuvrageAuClavier(void)
 //fonctions d'affichage de la liste des livres de la bibliothèque
 
 void afficherOuvrage(Ouvrage **Touv, int nb)
-
 {
 	int i;
 	for (i = 0; i < nb; i++)
@@ -182,7 +175,6 @@ void afficherOuvrage(Ouvrage **Touv, int nb)
 //fonctions de sauvegarde du fichier ouvrage
 
 void sauvegardeOuvrage(Ouvrage **Touv, int nb)
-
 {
 	int i = 0;
 	FILE *flot;
@@ -203,7 +195,6 @@ void sauvegardeOuvrage(Ouvrage **Touv, int nb)
 }
 
 void printOuvrage(Ouvrage **Touv, FILE *flot, int i)
-
 {
 	fprintf(flot, "%s\n", Touv[i]->cote);
 	fprintf(flot, "%s\n", Touv[i]->titre);

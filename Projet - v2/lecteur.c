@@ -12,7 +12,6 @@ ListeLecteur listeVide(void)
 //fonctions de chargement des lecteurs dans une liste
 
 ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom)
-
 {
 	Lecteur Lec;
 	FILE *flot;
@@ -35,7 +34,6 @@ ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom)
 }
 
 Lecteur lireLecteur(FILE *flot)
-
 {
 	Lecteur Lec;
 
@@ -60,7 +58,6 @@ Lecteur lireLecteur(FILE *flot)
 //fonctions d'insertion d'un lecteur dans une liste à 2 pointeurs
 
 int ExisteNumLec(ListeLecteur listeLNum, char NumLecteur[])
-
 {
 	if (listeLNum == NULL)
 		return 0;
@@ -142,7 +139,6 @@ ListeLecteur insererLec(ListeLecteur listeLNum, ListeLecteur *listeLNom, Lecteur
 }
 
 ListeLecteur ajouterLecteurAuClavier(ListeLecteur listeLNum, ListeLecteur *listeLNom)
-
 {
 	int choix, trouve;
 	Lecteur Lec;
@@ -207,7 +203,6 @@ void afficherLec(ListeLecteur listeL, int menu)
 }
 
 void AffichInfosLec(ListeLecteur listeLNum)
-
 {
 	ListeLecteur aux;
 	char NumLecRech[6], c;
@@ -247,7 +242,6 @@ ListeLecteur rechercheNom(char numLecteur[], ListeLecteur listeLNom)
 }
 
 ListeLecteur SupprimerGENERAL(ListeLecteur ListeLNum, ListeLecteur *ListeLNom)
-
 {
 	char NumLecRech[6], c;
 	int trouve, choix;
@@ -276,7 +270,6 @@ ListeLecteur SupprimerGENERAL(ListeLecteur ListeLNum, ListeLecteur *ListeLNom)
 }
 
 ListeLecteur supprimerEnTete(ListeLecteur ListeASup, int idListe)
-
 {
 	MaillonLecteur *aux;
 	if (ListeASup == NULL)
@@ -314,7 +307,6 @@ ListeLecteur supprimerLecNom(ListeLecteur ListeLNom, ListeLecteur listeApresRech
 //fonctions de sauvegarde du fichier lecteur
 
 void sauvegardeLecteur(ListeLecteur listeLNum)
-
 {
 	FILE *flot;
 	flot = fopen("lecteur.don", "w");
@@ -334,7 +326,6 @@ void sauvegardeLecteur(ListeLecteur listeLNum)
 }
 
 void printLecteur(ListeLecteur listeLNum, FILE *flot)
-
 {
 	fprintf(flot, "%s\n", listeLNum->l.numLecteur);
 	fprintf(flot, "%s\n", listeLNum->l.nom);
@@ -348,7 +339,6 @@ void printLecteur(ListeLecteur listeLNum, FILE *flot)
 //fonctions de modification d'une adresse pour un lecteur donné
 
 ListeLecteur menuModifAdresse(ListeLecteur listeLNum)
-
 {
 	char NumLecRech[6], c;
 	int trouve;
@@ -365,7 +355,6 @@ ListeLecteur menuModifAdresse(ListeLecteur listeLNum)
 }
 
 ListeLecteur modifAdresse(ListeLecteur listeLNum, ListeLecteur listeApresRech)
-
 {
 	if (listeLNum == listeApresRech)
 	{
@@ -376,7 +365,6 @@ ListeLecteur modifAdresse(ListeLecteur listeLNum, ListeLecteur listeApresRech)
 }
 
 Adresse rentrerAdresse(ListeLecteur listeLNum)
-
 {
 	Adresse a;
 	printf("Nouvelle ville :\n");

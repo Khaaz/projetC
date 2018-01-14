@@ -2,16 +2,16 @@
 
 //FONCTIONS POUR LES EMPRUNT
 
+//initialisation
+//
 ListeEmprunt listeVideE(void)
-
 {
 	return NULL;
 }
 
-//fonctions de chargement du fichier emprunt
-
+// chargement
+//
 ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp)
-
 {
 	Emprunt emp;
 	FILE *flot;
@@ -34,7 +34,6 @@ ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp)
 }
 
 Emprunt lireEmprunt(FILE *flot)
-
 {
 	Emprunt emp;
 	fscanf(flot, "%s%*c\n", emp.cote);
@@ -44,10 +43,19 @@ Emprunt lireEmprunt(FILE *flot)
 	return emp;
 }
 
-//fonctions d'insertion d'un emprunt
+ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
+{
+	if (listeLEmp == NULL)
+		return ajouterEnTeteEmprunt(listeLEmp, emp);
+	if (strcmp(emp.cote, listeLEmp->e.cote) < 0)
+		return ajouterEnTeteEmprunt(listeLEmp, emp);
+	if (strcmp(emp.cote, listeLEmp->e.cote) == 0)
+		return listeLEmp;
+	listeLEmp->suivEmprunt = insererEmprunt(listeLEmp->suivEmprunt, emp);
+	return listeLEmp;
+}
 
 ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
-
 {
 	MaillonEmprunt *m;
 	m = (MaillonEmprunt *)malloc(sizeof(MaillonEmprunt));
@@ -61,19 +69,8 @@ ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
 	return m;
 }
 
-ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
-
-{
-	if (listeLEmp == NULL)
-		return ajouterEnTeteEmprunt(listeLEmp, emp);
-	if (strcmp(emp.cote, listeLEmp->e.cote) < 0)
-		return ajouterEnTeteEmprunt(listeLEmp, emp);
-	if (strcmp(emp.cote, listeLEmp->e.cote) == 0)
-		return listeLEmp;
-	listeLEmp->suivEmprunt = insererEmprunt(listeLEmp->suivEmprunt, emp);
-	return listeLEmp;
-}
-
+//insertion
+//
 ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv)
 {
 	Emprunt emp;
@@ -112,22 +109,6 @@ ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, Liste
 	return listeLEmp;
 }
 
-//fonction d'affichage de la liste des emprunts en cours
-
-void afficherEmprunt(ListeEmprunt listeL)
-{
-	printf("\n-----------------------------------------------------------------------------------------------------\n");
-	printf("Cote\t\tLecteur\tdateEmprunt\n\n");
-	while (listeL != NULL)
-	{
-		printf("%s\t%s\t%d/%d/%d\n", listeL->e.cote, listeL->e.numLecteur, listeL->e.dateEmprunt.jour, listeL->e.dateEmprunt.mois, listeL->e.dateEmprunt.annee);
-		listeL = listeL->suivEmprunt;
-	}
-	printf("-----------------------------------------------------------------------------------------------------\n");
-}
-
-//Recherche ouvrage
-
 int existeOuvrage(Ouvrage **Touv, char cote[], int nbOuv)
 {
 	int i;
@@ -141,10 +122,104 @@ int existeOuvrage(Ouvrage **Touv, char cote[], int nbOuv)
 	return -1;
 }
 
-//fonctions de sauvegarde du fichier emprunt
+// Affichage
+//
+void afficherEmprunt(ListeEmprunt listeL)
+{
+	printf("\n-----------------------------------------------------------------------------------------------------\n");
+	printf("Cote\t\tLecteur\tdateEmprunt\n\n");
+	while (listeL != NULL)
+	{
+		printf("%s\t%s\t%d/%d/%d\n", listeL->e.cote, listeL->e.numLecteur, listeL->e.dateEmprunt.jour, listeL->e.dateEmprunt.mois, listeL->e.dateEmprunt.annee);
+		listeL = listeL->suivEmprunt;
+	}
+	printf("-----------------------------------------------------------------------------------------------------\n");
+}
 
+// Retourner emprunt
+//
+ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv)
+{
+	system("date +%d/%m/%Y > date.txt");
+	MaillonEmprunt *aux;
+	Date dateretour;
+	int joursEmp, rangOuv;
+	char cote[11];
+	printf("Cote de l'ouvrage ?\n");
+	scanf("%s%*c", cote);
+	rangOuv = existeOuvrage(Touv, cote, nbOuv);
+	if (rangOuv == -1)
+	{
+		printf("\nOuvrage introuvable\n");
+		return listeLEmp;
+	}
+	if (Touv[rangOuv]->dispo == vrai)
+	{
+		printf("\nOuvrage déja disponible\n");
+		return listeLEmp;
+	}
+	aux = trouverEmprunt(listeLEmp, cote);
+	printf("Date de retour ? (jj/mm/yyyy)\n");
+	scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
+	joursEmp = compareDate(aux->e.dateEmprunt, dateretour);
+	while (dateretour.jour>31 || dateretour.jour<1 || dateretour.mois>12 || dateretour.mois<1 || dateretour.annee<2018 || joursEmp < 0)
+	{
+		printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
+		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
+		joursEmp = compareDate(listeLEmp->e.dateEmprunt, dateretour);
+	}
+	if (joursEmp > 15)
+		printf("\nDélais de 15 jours non respecté ! Le lecteur doit payer une amende !\n");
+	Touv[rangOuv]->dispo=vrai;
+	listeLEmp=SuppEmp(listeLEmp, cote);
+	printf("\n--- EMPRUNT CORRECTEMENT SUPPRIME ---\n");
+	return listeLEmp;
+}
+
+ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp, char cote[])
+{
+	if (strcmp(cote, listeLEmp->e.cote) == 0)
+		return listeLEmp;
+	listeLEmp=trouverEmprunt(listeLEmp->suivEmprunt, cote);
+	return listeLEmp;
+}
+
+int compareDate(Date d1, Date d2)
+{
+	int dateJ1, dateJ2, result;
+	dateJ1 = (d1.jour) + ((d1.mois) * 30) + ((d1.annee) * 365);
+	dateJ2 = (d2.jour) + ((d2.mois) * 30) + ((d2.annee) * 365);
+	result = dateJ2-dateJ1;
+	return result;
+}
+
+ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[])
+{
+	if (listeLEmp == NULL)
+		return listeLEmp;
+	if (strcmp(cote, listeLEmp->e.cote) == 0)
+		return Suppentete(listeLEmp);
+	listeLEmp->suivEmprunt = SuppEmp(listeLEmp->suivEmprunt, cote);
+	return listeLEmp;
+}
+
+ListeEmprunt Suppentete(ListeEmprunt listeLEmp)
+{
+	MaillonEmprunt *aux;
+	if (listeLEmp == NULL)
+	{
+		printf("OP interdite");
+		exit(1);
+	}
+	aux = listeLEmp;
+	listeLEmp = listeLEmp->suivEmprunt;
+	free(aux);
+	return listeLEmp;
+}
+
+// Sauvegarde
+//
 void sauvegardeEmprunt(ListeEmprunt listeLEmp)
-
 {
 	FILE *flot;
 	flot = fopen("emprunt.don", "w");
@@ -164,99 +239,8 @@ void sauvegardeEmprunt(ListeEmprunt listeLEmp)
 }
 
 void printEmprunt(ListeEmprunt listeLEmp, FILE *flot)
-
 {
 	fprintf(flot, "%s\n", listeLEmp->e.cote);
 	fprintf(flot, "%s\n", listeLEmp->e.numLecteur);
 	fprintf(flot, "%d/%d/%d\n", listeLEmp->e.dateEmprunt.jour, listeLEmp->e.dateEmprunt.mois, listeLEmp->e.dateEmprunt.annee);
-}
-
-//fonction date de retour
-
-ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv)
-{
-	system("date +%d/%m/%Y > date.txt");
-	MaillonEmprunt *aux;
-	Date dateretour;
-	int joursEmp, rangOuv;
-	char cote[11], c;
-	printf("Cote de l'ouvrage ?\n");
-	scanf("%s%*c", cote);
-	rangOuv = existeOuvrage(Touv, cote, nbOuv);
-	if (rangOuv == -1)
-	{
-		printf("\nOuvrage introuvable\n");
-		return listeLEmp;
-	}
-	if (Touv[rangOuv]->dispo == vrai)
-	{
-		printf("\nOuvrage déja disponible\n");
-		return listeLEmp;
-	}
-	aux = trouverEmprunt(listeLEmp, cote);
-	printf("Date de retour ? (jj/mm/yyyy)\n");
-	scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
-	while (dateretour.jour>31 || dateretour.jour<1 || dateretour.mois>12 || dateretour.mois<1 || dateretour.annee<2018)
-	{
-		printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
-		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
-	}
-	joursEmp = compareDate(aux->e.dateEmprunt, dateretour);
-	while (joursEmp < 0)
-	{
-		printf("Date incohérente !! Date de retour ? (jj/mm/yyyy)\n");
-		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
-		joursEmp = compareDate(listeLEmp->e.dateEmprunt, dateretour);
-	}
-	if (joursEmp > 15)
-		printf("\nDélais de 15 jours non respecté ! Le lecteur doit payer une amende !\n");
-	Touv[rangOuv]->dispo=vrai;
-	listeLEmp=SuppEmp(listeLEmp, cote);
-	printf("\n--- EMPRUNT CORRECTEMENT SUPPRIME ---\n");
-	return listeLEmp;
-}
-
-//fonction compare date
-
-int compareDate(Date d1, Date d2)
-{
-	int dateJ1, dateJ2, result;
-	dateJ1 = (d1.jour) + ((d1.mois) * 30) + ((d1.annee) * 365);
-	dateJ2 = (d2.jour) + ((d2.mois) * 30) + ((d2.annee) * 365);
-	result = dateJ2-dateJ1;
-	return result;
-}
-
-ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp, char cote[])
-{
-	if (strcmp(cote, listeLEmp->e.cote) == 0)
-		return listeLEmp;
-	listeLEmp=trouverEmprunt(listeLEmp->suivEmprunt, cote);
-	return listeLEmp;
-}
-
-//supprimer en tete
-
-ListeEmprunt Suppentete(ListeEmprunt listeLEmp)
-{
-	MaillonEmprunt *aux;
-	if (listeLEmp == NULL)
-	{
-		printf("OP interdite");
-		exit(1);
-	}
-	aux = listeLEmp;
-	listeLEmp = listeLEmp->suivEmprunt;
-	free(aux);
-	return listeLEmp;
-}
-
-ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[])
-{
-	if (listeLEmp == NULL)
-		return listeLEmp;
-	if (strcmp(cote, listeLEmp->e.cote) == 0)
-		return Suppentete(listeLEmp);
-	listeLEmp->suivEmprunt = SuppEmp(listeLEmp->suivEmprunt, cote);
-	return listeLEmp;
 }

@@ -25,14 +25,14 @@ typedef struct
 } Adresse;
 
 // specifique
-typedef struct
+typedef struct // emprunt
 {
     char cote[11];
     char numLecteur[6];
     Date dateEmprunt;
 } Emprunt;
 
-typedef struct
+typedef struct // lecteur
 {
     char numLecteur[6];
     char nom[30];
@@ -40,7 +40,7 @@ typedef struct
     Adresse adresse;
 } Lecteur;
 
-typedef struct
+typedef struct // ouvrage
 {
     char cote[11];
     char titre[30];
@@ -50,14 +50,14 @@ typedef struct
 
 //listes
 
-typedef struct maillonLecteur
+typedef struct maillonLecteur // liste Lecteur
 {
     Lecteur l;
     struct maillonLecteur *suivNum;
     struct maillonLecteur *suivNom;
 } MaillonLecteur, *ListeLecteur;
 
-typedef struct maillonEmprunt
+typedef struct maillonEmprunt // liste Emprunt
 {
     Emprunt e;
     struct maillonEmprunt *suivEmprunt;
@@ -65,14 +65,15 @@ typedef struct maillonEmprunt
 
 // LISTE FONCTIONS
 
-//FONCTIONS LECTEUR(+MENUS)
-ListeLecteur listeVide(void);
-ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom);
-Lecteur lireLecteur(FILE *flot);
+//FONCTIONS MENUS
 int MenuPRINCIPAL(void);
 int MenuLecteur(void);
 int MenuOuvrage(void);
 int MenuEmprunt(void);
+//FONCTIONS LECTEUR
+ListeLecteur listeVide(void);
+ListeLecteur ChargementLecteur(ListeLecteur listeLNum, ListeLecteur *listeLNom);
+Lecteur lireLecteur(FILE *flot);
 int ExisteNumLec(ListeLecteur listeLNum, char NumLecteur[]);
 ListeLecteur insererLecNum(ListeLecteur listeL, MaillonLecteur *m, int *trouve);
 ListeLecteur insererLecNom(ListeLecteur listeL, MaillonLecteur *m);

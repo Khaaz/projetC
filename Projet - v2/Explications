@@ -1,13 +1,21 @@
+==> STRUCTURES
+Addresse: avec numRue, nomRue, ville, departement (code postal)
+Date: avec jour, mois, année
+
+Emprunt: cote (de l'ouvrage), numLecteur, date de l'emprunt
+Lecteur: numLecteur, nom, prenom, Addresse
+Ouvrage: Cote, titre, catégorie, disponibilité (oui ou non)
+
 
 LECTEUR
 Liste lecteur a deux pointeurs.
 Triage par numéro et triage par nom (ordre alphabétique)
 
 OUVRAGE
-Liste ouvrage
+Tableau dynamique de pointeur qui liste les ouvrages
 
 EMPRUNT
-Tableau dynamique de pointeur qui liste les emprunts
+Liste emprunt
 
 
 Deroulement:

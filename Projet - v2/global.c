@@ -2,21 +2,29 @@
 
 void global(void)
 {
+	//variables
 	ListeLecteur listeLNom, listeLNum;
 	ListeEmprunt listeLEmp;
 	Ouvrage **Touv;
+	int menu, choixM, tmaxOuvrage, nbOuvrage;
+	char c;
+
+	// intialisation
 	listeLNom = listeVide();
 	listeLNum = listeVide();
 	listeLEmp = listeVideE();
-	int menu, choixM, tmaxOuvrage, nbOuvrage;
-	char c;
+	
 	system("clear");
+
+	//chargement
 	listeLNum = ChargementLecteur(listeLNum, &listeLNom);
 	printf("Fichier lecteur chargé\n");
 	Touv = ChargementOuvrage(&tmaxOuvrage, &nbOuvrage);
 	printf("Fichier ouvrage chargé\n");
 	listeLEmp = ChargementEmprunt(listeLEmp);
 	printf("Fichier emprunt chargé\n");
+
+	//menu
 	choixM = MenuPRINCIPAL();
 	while (choixM != 0)
 	{

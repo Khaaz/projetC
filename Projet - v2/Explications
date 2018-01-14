@@ -1,0 +1,15 @@
+
+LECTEUR
+Liste lecteur a deux pointeurs.
+Triage par numéro et triage par nom (ordre alphabétique)
+
+OUVRAGE
+Liste ouvrage
+
+EMPRUNT
+Tableau dynamique de pointeur qui liste les emprunts
+
+
+Deroulement:
+Creer les 3 listes vides
+Insere les valeurs des fichiers dans ces listes

@@ -77,11 +77,11 @@ ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp)
 
 //insertion
 //
-ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv)
+ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv, Date date)
 {
 	//var
 	Emprunt emp;
-	int rangOuv, trouve;
+	int rangOuv, trouve, custom;
 	//
 	printf("Référence de l'emprunteur ?\n");
 	scanf("%s%*c", emp.numLecteur);
@@ -104,12 +104,23 @@ ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, Liste
 		printf("\nOuvrage indisponible désolé\n");
 		return listeLEmp;
 	}
-	printf("Date de l'emprunt ? (jj/mm/yyyy)\n");
-	scanf("%d/%d/%d%*c", &(emp.dateEmprunt.jour), &(emp.dateEmprunt.mois), &(emp.dateEmprunt.annee));
-	while (emp.dateEmprunt.jour>31 || emp.dateEmprunt.jour<1 || emp.dateEmprunt.mois>12 || emp.dateEmprunt.mois<1 || emp.dateEmprunt.annee<2018)
+	printf("Utiliser la date du jour ? (0=OUI/1=NON)\n");
+	scanf("%d%*c", &custom);
+	if (custom == 0)
 	{
-		printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
+		emp.dateEmprunt.jour = date.jour;
+		emp.dateEmprunt.mois = date.mois;
+		emp.dateEmprunt.annee = date.annee;
+	} 
+	else
+	{
+		printf("Date de l'emprunt ? (jj/mm/yyyy)\n");
 		scanf("%d/%d/%d%*c", &(emp.dateEmprunt.jour), &(emp.dateEmprunt.mois), &(emp.dateEmprunt.annee));
+		while (emp.dateEmprunt.jour>31 || emp.dateEmprunt.jour<1 || emp.dateEmprunt.mois>12 || emp.dateEmprunt.mois<1 || emp.dateEmprunt.annee>date.annee)
+		{
+			printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
+			scanf("%d/%d/%d%*c", &(emp.dateEmprunt.jour), &(emp.dateEmprunt.mois), &(emp.dateEmprunt.annee));
+		}
 	}
 	Touv[rangOuv]->dispo = faux;
 	listeLEmp = insererEmprunt(listeLEmp, emp);
@@ -148,13 +159,12 @@ void afficherEmprunt(ListeEmprunt listeL)
 
 // Retourner emprunt
 //
-ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv)
+ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv, Date date)
 {
 	//var
-	system("date +%d/%m/%Y > date.txt");
 	MaillonEmprunt *aux;
 	Date dateretour;
-	int joursEmp, rangOuv;
+	int joursEmp, rangOuv, custom;
 	char cote[11];
 	//
 	printf("Cote de l'ouvrage ?\n");
@@ -171,14 +181,25 @@ ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv)
 		return listeLEmp;
 	}
 	aux = trouverEmprunt(listeLEmp, cote);
-	printf("Date de retour ? (jj/mm/yyyy)\n");
-	scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
-	joursEmp = compareDate(aux->e.dateEmprunt, dateretour);
-	while (dateretour.jour>31 || dateretour.jour<1 || dateretour.mois>12 || dateretour.mois<1 || dateretour.annee<2018 || joursEmp < 0)
+	printf("Utiliser la date du jour ? (0=OUI/1=NON)\n");
+	scanf("%d%*c", &custom);
+	if (custom == 0)
 	{
-		printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
-		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
+		dateretour.jour = date.jour;
+		dateretour.mois = date.mois;
+		dateretour.annee = date.annee;
 		joursEmp = compareDate(listeLEmp->e.dateEmprunt, dateretour);
+	} 
+	else {
+		printf("Date de retour ? (jj/mm/yyyy)\n");
+		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
+		joursEmp = compareDate(aux->e.dateEmprunt, dateretour);
+		while (dateretour.jour>31 || dateretour.jour<1 || dateretour.mois>12 || dateretour.mois<1 || dateretour.annee>date.annee || joursEmp < 0)
+		{
+			printf("Date impossible ! Date de retour ? (jj/mm/yyyy)\n");
+			scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
+			joursEmp = compareDate(listeLEmp->e.dateEmprunt, dateretour);
+		}
 	}
 	if (joursEmp > 15)
 		printf("\nDélais de 15 jours non respecté ! Le lecteur doit payer une amende !\n");
@@ -261,4 +282,28 @@ void printEmprunt(ListeEmprunt listeLEmp, FILE *flot)
 	fprintf(flot, "%s\n", listeLEmp->e.cote);
 	fprintf(flot, "%s\n", listeLEmp->e.numLecteur);
 	fprintf(flot, "%d/%d/%d\n", listeLEmp->e.dateEmprunt.jour, listeLEmp->e.dateEmprunt.mois, listeLEmp->e.dateEmprunt.annee);
+}
+
+// DATE
+//
+
+Date chargementDate(void)
+{
+	//var
+	Date date;
+	FILE *flot;
+	//
+	flot = fopen("date.txt", "r");
+	if (flot == NULL)
+	{
+		printf("Problème flot\n");
+		fclose(flot);
+		exit(1);
+	}
+
+	fscanf(flot, "%d/%d/%d%*c\n", &date.jour, &date.mois, &date.annee);
+
+	fclose(flot);
+
+	return date;
 }

@@ -6,10 +6,12 @@ void global(void)
 	ListeLecteur listeLNom, listeLNum;
 	ListeEmprunt listeLEmp;
 	Ouvrage **Touv;
-	int menu, choixM, tmaxOuvrage, nbOuvrage;
+	Date date;
+	int menu, choixM, tmaxOuvrage, nbOuvrage, save;
 	char c;
 
 	// intialisation
+	system("date +%d/%m/%Y > date.txt");
 	listeLNom = listeVide();
 	listeLNum = listeVide();
 	listeLEmp = listeVideE();
@@ -17,6 +19,8 @@ void global(void)
 	system("clear");
 
 	//chargement
+	date = chargementDate();
+	printf("Date chargée\n");
 	listeLNum = ChargementLecteur(listeLNum, &listeLNom);
 	printf("Fichier lecteur chargé\n");
 	Touv = ChargementOuvrage(&tmaxOuvrage, &nbOuvrage);
@@ -109,7 +113,7 @@ void global(void)
 				{
 				case 1:
 					system("clear");
-					listeLEmp = insererClavierEmprunt(listeLEmp, Touv, listeLNum, nbOuvrage);
+					listeLEmp = insererClavierEmprunt(listeLEmp, Touv, listeLNum, nbOuvrage, date);
 					break;
 				case 2:
 					system("clear");
@@ -117,7 +121,7 @@ void global(void)
 					break;
 				case 3:
 					system("clear");
-					listeLEmp = RetourEmprunt(listeLEmp, Touv, nbOuvrage);
+					listeLEmp = RetourEmprunt(listeLEmp, Touv, nbOuvrage, date);
 					break;
 				case 4:
 					system("clear");
@@ -132,6 +136,14 @@ void global(void)
 		}
 		system("clear");
 		choixM = MenuPRINCIPAL();
+	}
+	printf("Voulez vous sauvegarder avant de quitter? (0=OUI/1=NON)\n");
+	scanf("%d%*c", &save);
+	if (save == 0)
+	{
+		sauvegardeLecteur(listeLNum);
+		sauvegardeEmprunt(listeLEmp);
+		sauvegardeOuvrage(Touv,nbOuvrage);
 	}
 	system("clear");
 }

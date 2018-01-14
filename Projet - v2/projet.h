@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
-
-
 //struct generale
 typedef enum { faux, vrai } Booleen;
 
@@ -109,12 +105,13 @@ Emprunt lireEmprunt(FILE *flot);
 ListeEmprunt ajouterEnTeteEmprunt(ListeEmprunt listeLEmp, Emprunt emp);
 ListeEmprunt insererEmprunt(ListeEmprunt listeLEmp, Emprunt emp);
 void afficherEmprunt(ListeEmprunt listeL);
-ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv);
+ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, ListeLecteur listeLNum, int nbOuv, Date date);
 int existeOuvrage(Ouvrage **Touv, char cote[], int nbOuv);
 void sauvegardeEmprunt(ListeEmprunt listeLEmp);
 void printEmprunt(ListeEmprunt listeLEmp, FILE *flot);
-ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv);
+ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv, Date date);
 int compareDate(Date d1, Date d2);
 ListeEmprunt trouverEmprunt(ListeEmprunt listeLEmp, char cote[]);
 ListeEmprunt Suppentete(ListeEmprunt listeLEmp);
 ListeEmprunt SuppEmp(ListeEmprunt listeLEmp, char cote[]);
+Date chargementDate(void);

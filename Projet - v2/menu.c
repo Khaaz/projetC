@@ -24,7 +24,7 @@ int MenuOuvrage(void)
 {
 	int menu;
 	//
-	printf("\n1) Insérer un nouvel ouvrage\n2) Afficher la liste des ouvrages\n3) Sauvegarder le fichier des ouvrages\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
+	printf("\n1) Insérer un nouvel ouvrage\n2) Afficher la liste des ouvrages\n3) Supprimer un ouvrage\n4) Sauvegarder le fichier des ouvrages\n0) REVENIR AU MENU PRINCIPAL\n\n--- Que voulez-vous faire ? ---\n");
 	scanf("%d%*c", &menu);
 	return menu;
 }

@@ -217,3 +217,61 @@ void printOuvrage(Ouvrage **Touv, FILE *flot, int i)
 	else
 		fprintf(flot, "emprunte\n");
 }
+
+//Suppression
+//
+Ouvrage **supprimerOuvrage(Ouvrage** TOuv, int *nb)
+{
+	//var
+	char coteRech[11];
+	int pos;
+	//
+	printf("Côte de l'ouvrage :\n");
+	scanf("%s%*c", coteRech);
+
+	pos = rechercheDichotomie2(TOuv, *nb, coteRech);
+	if (pos == -1)
+	{
+		printf("Cet ouvrage n'existe pas!");
+		return TOuv;
+	}
+	if ( TOuv[pos]->dispo == vrai)
+	{
+		TOuv = decalerAGauche(TOuv, pos, *nb);
+		*nb = *nb-1;
+		printf("L'ouvrage a bien été supprimé!");
+	}
+	else
+	{
+		printf("Cet ouvrage est en cours d'emprunt et ne peut pas être supprimé!");
+		return TOuv;
+	}
+	return TOuv;
+}
+
+int rechercheDichotomie2(Ouvrage **tab, int nb, char coteRech[])
+{
+	//var
+	int inf, sup, m;
+	//
+	inf = 0;
+	sup = nb - 1;
+	while (inf <= sup)
+	{
+		m = (inf + sup) / 2;
+		if (strcmp(coteRech, tab[m]->cote) == 0)
+			return m;
+		if (strcmp(coteRech, tab[m]->cote) > 0)
+			inf = m + 1;
+		else
+			sup = m - 1;
+	}
+	return -1;
+}
+
+Ouvrage **decalerAGauche(Ouvrage **Touv, int pos, int nb)
+{
+	for (pos; pos < nb-1; pos++)
+		*Touv[pos] = *Touv[pos + 1];
+	return Touv;
+}

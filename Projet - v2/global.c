@@ -40,35 +40,37 @@ void global(void)
 			{
 				switch (menu)
 				{
-				case 1:
-					system("clear");
-					listeLNum = ajouterLecteurAuClavier(listeLNum, &listeLNom);
-					break;
-				case 2:
-					system("clear");
-					system("clear");
-					listeLNum = SupprimerGENERAL(listeLNum, &listeLNom);
-					break;
-				case 3:
-					system("clear");
-					AffichInfosLec(listeLNum);
-					break;
-				case 4:
-					system("clear");
-					afficherLec(listeLNom, menu);
-					break;
-				case 5:
-					system("clear");
-					afficherLec(listeLNum, menu);
-					break;
-				case 6:
-					system("clear");
-					sauvegardeLecteur(listeLNum);
-					break;
-				case 7:
-					system("clear");
-					listeLNum = menuModifAdresse(listeLNum);
-					break;
+					case 1:
+						system("clear");
+						listeLNum = ajouterLecteurAuClavier(listeLNum, &listeLNom);
+						break;
+					case 2:
+						system("clear");
+						system("clear");
+						listeLNum = SupprimerGENERAL(listeLNum, &listeLNom);
+						break;
+					case 3:
+						system("clear");
+						AffichInfosLec(listeLNum);
+						break;
+					case 4:
+						system("clear");
+						afficherLec(listeLNom, menu);
+						break;
+					case 5:
+						system("clear");
+						afficherLec(listeLNum, menu);
+						break;
+					case 6:
+						system("clear");
+						sauvegardeLecteur(listeLNum);
+						break;
+					case 7:
+						system("clear");
+						listeLNum = menuModifAdresse(listeLNum);
+						break;
+					default:
+						break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU LECTEUR ---");
 				c = getchar();
@@ -84,18 +86,24 @@ void global(void)
 			{
 				switch (menu)
 				{
-				case 1:
-					system("clear");
-					Touv = insererOuvrage(Touv, &nbOuvrage, &tmaxOuvrage);
-					break;
-				case 2:
-					system("clear");
-					afficherOuvrage(Touv, nbOuvrage);
-					break;
-				case 3:
-					system("clear");
-					sauvegardeOuvrage(Touv, nbOuvrage);
-					break;
+					case 1:
+						system("clear");
+						Touv = insererOuvrage(Touv, &nbOuvrage, &tmaxOuvrage);
+						break;
+					case 2:
+						system("clear");
+						afficherOuvrage(Touv, nbOuvrage);
+						break;
+					case 3:
+						system("clear");
+						Touv = supprimerOuvrage(Touv, &nbOuvrage);
+						break;
+					case 4:
+						system("clear");
+						sauvegardeOuvrage(Touv, nbOuvrage);
+						break;
+					default:
+						break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU OUVRAGE ---");
 				c = getchar();
@@ -111,22 +119,24 @@ void global(void)
 			{
 				switch (menu)
 				{
-				case 1:
-					system("clear");
-					listeLEmp = insererClavierEmprunt(listeLEmp, Touv, listeLNum, nbOuvrage, date);
-					break;
-				case 2:
-					system("clear");
-					afficherEmprunt(listeLEmp);
-					break;
-				case 3:
-					system("clear");
-					listeLEmp = RetourEmprunt(listeLEmp, Touv, nbOuvrage, date);
-					break;
-				case 4:
-					system("clear");
-					sauvegardeEmprunt(listeLEmp);sauvegardeOuvrage(Touv,nbOuvrage);
-					break;
+					case 1:
+						system("clear");
+						listeLEmp = insererClavierEmprunt(listeLEmp, Touv, listeLNum, nbOuvrage, date);
+						break;
+					case 2:
+						system("clear");
+						afficherEmprunt(listeLEmp);
+						break;
+					case 3:
+						system("clear");
+						listeLEmp = RetourEmprunt(listeLEmp, Touv, nbOuvrage, date);
+						break;
+					case 4:
+						system("clear");
+						sauvegardeEmprunt(listeLEmp);sauvegardeOuvrage(Touv,nbOuvrage);
+						break;
+					default:
+						break;
 				}
 				printf("\n--- APPUYEZ SUR ENTRER POUR REVENIR AU MENU EMPRUNT ---");
 				c = getchar();

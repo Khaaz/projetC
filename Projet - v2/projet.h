@@ -98,6 +98,9 @@ Ouvrage **decalerAdroite(Ouvrage **Touv, int pos, int nb);
 Ouvrage ajouterOuvrageAuClavier(void);
 void sauvegardeOuvrage(Ouvrage **Touv, int nb);
 void printOuvrage(Ouvrage **Touv, FILE *flot, int i);
+Ouvrage **supprimerOuvrage(Ouvrage** TOuv, int *nb);
+int rechercheDichotomie2(Ouvrage **tab, int nb, char coteRech[]);
+Ouvrage **decalerAGauche(Ouvrage **Touv, int pos, int nb);
 //FONCTIONS EMPRUNT
 ListeEmprunt listeVideE(void);
 ListeEmprunt ChargementEmprunt(ListeEmprunt listeLEmp);

@@ -232,18 +232,18 @@ Ouvrage **supprimerOuvrage(Ouvrage** TOuv, int *nb)
 	pos = rechercheDichotomie2(TOuv, *nb, coteRech);
 	if (pos == -1)
 	{
-		printf("Cet ouvrage n'existe pas!");
+		printf("\nCet ouvrage n'existe pas!\n");
 		return TOuv;
 	}
 	if ( TOuv[pos]->dispo == vrai)
 	{
 		TOuv = decalerAGauche(TOuv, pos, *nb);
 		*nb = *nb-1;
-		printf("L'ouvrage a bien été supprimé!");
+		printf("\nL'ouvrage a bien été supprimé!\n");
 	}
 	else
 	{
-		printf("Cet ouvrage est en cours d'emprunt et ne peut pas être supprimé!");
+		printf("\nCet ouvrage est en cours d'emprunt et ne peut pas être supprimé!\n");
 		return TOuv;
 	}
 	return TOuv;

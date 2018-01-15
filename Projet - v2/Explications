@@ -1,23 +1,122 @@
-==> STRUCTURES
-Addresse: avec numRue, nomRue, ville, departement (code postal)
+==> STRUCTURE DE CHAQUE FICHIER
+
+
+Fichier "lecteur.don"	:
+le fichier permettant de charger dans une liste les différents lecteurs a la structure suivante:
+
+NuméroDeLecteur
+Nom
+Prénom
+NuméroRue   	NomDeRue
+Ville
+CodePostal
+NuméroDeLecteur
+Nom
+...
+
+Fichier "ouvrage.don"	:
+le fichier permettant de charger dans un tableau dynamique de pointeurs les différents ouvrage a la structure suivante:
+
+CoteDeLouvrage
+TitreOuvrage
+CatégorieOuvrage
+StatutDemprunt ∈(dispo,emprunte)
+CoteDeLouvrage
+TitreOuvrage
+...
+
+Fichier "emprunt.don"	:
+le fichier permettant de charger dans une liste les différents emprunts a la structure suivante:
+
+CoteDeLouvrageEmprunté
+NuméroDeLecteurDeLemprunteur
+DateDemprunt
+CoteDeLouvrageEmprunté
+NuméroDeLecteurDeLemprunteur
+...
+
+
+
+
+
+==> STRUCTURES,TABLEAUX,LISTES
+
+
+Adresse: avec numRue, nomRue, ville, departement (code postal)
 Date: avec jour, mois, année
 
+
 Emprunt: cote (de l'ouvrage), numLecteur, date de l'emprunt
-Lecteur: numLecteur, nom, prenom, Addresse
+Lecteur: numLecteur, nom, prenom, Adresse
 Ouvrage: Cote, titre, catégorie, disponibilité (oui ou non)
 
 
-LECTEUR
-Liste lecteur a deux pointeurs.
+LISTE LECTEUR
+Liste lecteur à deux pointeurs.
 Triage par numéro et triage par nom (ordre alphabétique)
+Structure composéé d'un Lecteur et de deux suiveurs
 
-OUVRAGE
-Tableau dynamique de pointeur qui liste les ouvrages
+TABLEAU OUVRAGE
+Tableau dynamique de pointeur qui liste les ouvrages triés par cote d'ouvrage
 
-EMPRUNT
-Liste emprunt
+LISTE EMPRUNT
+Liste emprunt à 1 pointeur.
+Triage par cote de l'ouvrage emprunté
+Structure composée d'un Emprunt et d'un suiveur
 
 
-Deroulement:
-Creer les 3 listes vides
-Insere les valeurs des fichiers dans ces listes
+
+
+
+
+==> LISTE DES FONCTIONNALITÉES
+
+
+Le programme est composé de différentes fonctionnalités divisées dans 3 menus différents 
+
+
+MENU LECTEUR	:
+
+- Insérer un nouveau lecteur :	
+	La fonction principale "ajouterLecteurAuClavier" retourne la liste de lecteur triée par numéro et prend en paramètre cette même liste de lecteur triée par numéro ainsi qu'un pointeur sur la liste de lecteur triée par nom afin de récupérer ses données également.
+	On demande à l'utilisateur d'entrer les données du lecteur qu'il veut ajouter, si le numéro de lecteur ajouté existe dèja on affiche un message et on retourne la liste, sinon on insère le nouveau lecteur dans les deux listes et on retourne la liste.
+
+- Supprimer un lecteur :
+	La fonction principale "SupprimerGENERAL" retourne la liste de lecteur triée par numéro et prend en paramètre cette même liste de lecteur triée par numéro ainsi qu'un pointeur sur la liste de lecteur triée par nom afin de récupérer ses données également.	
+	On demande à l'utilisateur d'entrer le numéro de lecteur du lecteur qu'il veut supprimer, si ce numéro de lecteur n'existe pas on affiche un message et on retourne la liste, sinon on affiche les données du lecteur que l'on veut supprimer, on supprime bien le lecteur dans les deux listes et on retourne la liste.
+
+- Afficher les informations d'un seul lecteur :
+	La fonction principale "AffichInfosLec" prend en paramètre la liste de lecteur triée par numéro et ne retourne rien.
+	On demande à l'utilisateur de'entrer le numéro de lecteur du lecteur dont il veut voir les informations, si ce numéro n'existe pas on affiche un message et on quitte la fonction, sinon on affiche les informations correspondantes au lecteur demandé.
+
+- Afficher la liste des lecteurs par ordre alphabétique :
+	La fonction principale "afficherLec" prend en paramètre la liste triée par nom et le numéro du choix de triage (Triage par nom ou par numéro) pour savoir quel suiveur de liste utiliser.
+	On affiche simplemement la liste des lecteurs trié par nom tant que la liste n'est pas finie.
+
+- Afficher la liste des lecteurs par ordre de numéro de lecteur :
+	La fonction principale "afficherLec" prend en paramètre la liste triée par numéro de lecteur et le numéro du choix de triage (Triage par nom ou par numéro) pour savoir quel suiveur de liste utiliser.
+	On affiche simplemement la liste des lecteurs trié par numéro de lecteur tant que la liste n'est pas finie.
+
+- Modifier l'adresse d'un lecteur :
+
+- Sauvegarder le fichier "lecteur.don" :
+
+
+MENU OUVRAGE	:
+
+- Insérer un nouvel ouvrage :
+- Afficher la liste des ouvrages :
+- Supprimer un ouvrage :
+- Sauvegarder le fichier "ouvrage.don" :
+
+
+MENU EMPRUNT	:
+
+- Enregistrer un nouvel emprunt :
+- Afficher la liste des emprunts en cours :
+- Enregistrer une date de retour d'emprunt :
+- Sauvegarder les fichiers "ouvrage.don" et "emprunt.don" :
+
+
+
+

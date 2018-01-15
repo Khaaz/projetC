@@ -174,9 +174,11 @@ ListeLecteur ajouterLecteurAuClavier(ListeLecteur listeLNum, ListeLecteur *liste
 	if (choix == 0)
 	{
 		trouve = ExisteNumLec(listeLNum, Lec.numLecteur);
-		listeLNum = insererLec(listeLNum, listeLNom, Lec);
 		if (trouve == 0)
+		{
+			listeLNum = insererLec(listeLNum, listeLNom, Lec);
 			printf("\n--- LECTEUR ENREGISTRE ---\n");
+		}
 		else
 			printf("\n--- LECTEUR NON ENREGISTRE CAR NUMERO DE LECTEUR EXISTE DEJA ---\n");
 	}

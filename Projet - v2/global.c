@@ -46,7 +46,6 @@ void global(void)
 						break;
 					case 2:
 						system("clear");
-						system("clear");
 						listeLNum = SupprimerGENERAL(listeLNum, &listeLNom);
 						break;
 					case 3:

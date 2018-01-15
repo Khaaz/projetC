@@ -101,7 +101,7 @@ ListeEmprunt insererClavierEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, Liste
 	}
 	if (Touv[rangOuv]->dispo == faux)
 	{
-		printf("\nOuvrage indisponible désolé\n");
+		printf("\nOuvrage dèja en cours d'emprunt\n");
 		return listeLEmp;
 	}
 	printf("Utiliser la date du jour ? (0=OUI/1=NON)\n");
@@ -190,7 +190,8 @@ ListeEmprunt RetourEmprunt(ListeEmprunt listeLEmp, Ouvrage **Touv, int nbOuv, Da
 		dateretour.annee = date.annee;
 		joursEmp = compareDate(listeLEmp->e.dateEmprunt, dateretour);
 	} 
-	else {
+	else 
+	{
 		printf("Date de retour ? (jj/mm/yyyy)\n");
 		scanf("%d/%d/%d%*c", &(dateretour.jour), &(dateretour.mois), &(dateretour.annee));
 		joursEmp = compareDate(aux->e.dateEmprunt, dateretour);
